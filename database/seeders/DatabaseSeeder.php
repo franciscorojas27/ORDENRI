@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             JobTitleSeeder::class,
             StatusSeeder::class,
             TypeSeeder::class,
+            GeneralManagementsSeeder::class,
             ResolutionAreaSeeder::class,
             UserSeeder::class,
             OrderSeeder::class,

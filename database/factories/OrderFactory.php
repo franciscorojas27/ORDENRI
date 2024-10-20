@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -15,11 +16,12 @@ class OrderFactory extends Factory
      * @return array<string, mixed>
      */
     public function definition(): array
-    {
+    { 
+        $a = User::find(1);
         return [
-            'client_id' => $this->faker->numberBetween(1, 100),
-            'applicant_to_id' => $this->faker->numberBetween(1, 100),
-            'responsible_id' => $this->faker->numberBetween(1, 100),
+            'client_id' => 1,
+            'applicant_to_id' => 1,
+            'responsible_id' => 1,
             'resolution_area_id' => $this->faker->numberBetween(1, 4),
             'type_id' => $this->faker->numberBetween(1, 3),
             'status_id' => $this->faker->numberBetween(1, 7),

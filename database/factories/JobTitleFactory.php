@@ -17,7 +17,7 @@ class JobTitleFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => $this->faker->unique()->randomElement(['Supervisor', 'admin', 'cliente', 'analista']),
+            'title' => $this->faker->unique()->randomElement(['Supervisor', 'Cliente', 'Analista','Administrador']),
         ];
     }
 }

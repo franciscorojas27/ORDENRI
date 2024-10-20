@@ -1,0 +1,18 @@
+</x-edit-select>
+                            <select required id="applicant_to_id" name="applicant_to_id"
+                                class="block mt-2 w-full text-black rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 appearance-none">
+                                <option value="{{ is_null($order['applicantTo']) ? 0 : ''}}"
+                                    {{ is_null($order['applicantTo']) ? 'selected' : 'disabled' }}
+                                    class="text-gray-500 dark:text-gray-400">
+                                    {{ $order['applicant_to_name'] ?? __('Select an option') }}
+                                </option>
+
+                                @foreach ($users as $user)
+                                    @if ($user->jobTitle->title !== 'Cliente')
+                                        <option value="{{ $user->id }}" class="text-black"
+                                            {{ isset($order['applicantTo']) && $user->id == $order['applicantTo']['id'] ? 'selected' : '' }}>
+                                            {{ $user->name }}
+                                        </option>
+                                    @endif
+                                @endforeach
+                            </select>
