@@ -61,7 +61,7 @@ class User extends Authenticatable
     }
     public static function getBasicUserInfo()
     {
-        return self::select('id', 'name', 'job_title_id')->get();
+        return self::select('id', 'name', 'job_title_id','last_name')->get();
     }
     public function jobTitle()
     {

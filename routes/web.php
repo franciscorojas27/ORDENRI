@@ -3,9 +3,15 @@ use App\Mail\WelcomeToTheJungle;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashBoardController;
 
+// Route::get('/chat', function () {
+//     return view('chat');
+// });
+
+// Route::post('/chatbot', [ChatbotController::class, 'chat'])->name('chatbot');
 
 Route::get('/', function () {
     $cacheKeys = Cache::getKeys(); // Solo si tienes un paquete que soporte esto

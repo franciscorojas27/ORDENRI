@@ -8,17 +8,44 @@ use Illuminate\Http\Request;
 use App\Models\GeneralManagements;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\RegisterRequest;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\UpdateControlUserRequest;
 
+/**
+ * @OA\Info(
+ *     title="API de Ejemplo",
+ *     version="1.0.0",
+ *     description="Esta es una API de prueba para demostrar L5-Swagger en Laravel.",
+ *     @OA\Contact(
+ *         name="Tu Nombre",
+ *         email="tuemail@example.com"
+ *     )
+ * )
+ */
 class AdminSecureUsersController extends Controller
-{
+{/**
+     * @OA\Get(
+     *     path="/api/test",
+     *     tags={"Test"},
+     *     summary="Test Route",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful response",
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Not Found"
+     *     )
+     * )
+     */
     public function index(Request $request){
+        
         if($request->search){
             $users = User::where('name', 'LIKE', "%{$request->search}%")
             ->orderBy('id', 'asc')
             ->paginate(10);
             if($users->count() == 0){
-                return redirect()->route('admin-secure');
+                return redirect()->route('admin-secure.index');
             }
             return view('secure.index', compact('users'));
         }
@@ -52,7 +79,7 @@ class AdminSecureUsersController extends Controller
         ]);
         $user->passwordRecords()->create(['password' => Hash::make($request->password)]);
 
-        return redirect(route('admin-secure'));
+        return redirect(route('admin-secure.index'));
     }
     public function destroy(User $user){
         $user->update(['is_deleted' => true]);

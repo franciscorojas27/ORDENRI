@@ -54,7 +54,6 @@ class LoginRequest extends FormRequest
             'email' => __('auth.failed'),
         ]);
     }
-    RateLimiter::clear('limit-login:' . Auth::user()->id);
     RateLimiter::clear($this->throttleKey());
 }
 

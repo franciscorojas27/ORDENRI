@@ -5,20 +5,63 @@ namespace App\Http\Controllers\Order;
 use App\Models\Type;
 use App\Models\User;
 use App\Models\Order;
+use App\Models\Status;
 use App\Models\Resolution_Area;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
+use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class OrderController extends Controller
 {
-    public function index()
+    public function index(HttpRequest $request)
     {   
-        $orders = Order::orderBy('created_at', 
-        'desc')->paginate(10);
-        return view('order.index')->with('orders', $orders);
+        $query = Order::query();
+        $message = ''; 
+    
+        switch (true) {
+            case $request->filled('resolution_area'):
+                $query->where('resolution_area_id', 'LIKE', "%{$request->resolution_area}%");
+                $message = 'Buscando órdenes por área de resolución.';
+                break;
+            case $request->filled('type'):
+                $query->where('type_id', 'LIKE', "%{$request->type}%");
+                $message = 'Buscando órdenes por tipo.';
+                break;
+            case $request->filled('status'):
+                $query->where('status_id', 'LIKE', "%{$request->status}%");
+                $message = 'Buscando órdenes por estado.';
+                break;
+            default:
+                $query;
+                break;
+        }
+        $orders = $query->orderBy('id', 'asc')->paginate(10);
+    
+        if ($orders->count() == 0) {
+            if ($request->filled('resolution_area')) {
+                session()->flash('message', 'No se encontraron órdenes para el área de resolución proporcionada.');
+            } elseif ($request->filled('type')) {
+                session()->flash('message', 'No se encontraron órdenes del tipo proporcionado.');
+            } elseif ($request->filled('status')) {
+                session()->flash('message', 'No se encontraron órdenes con el estado proporcionado.');
+            }
+            return redirect()->route('order.index');
+        }
+    
+        session()->flash('message', $message);
+    
+        return view('order.index', [
+            'orders' => $orders,
+            'types' => Type::all(),
+            'resolution_areas' => Resolution_Area::all(),
+            'statuses' => Status::all()
+        ]);
     }
+    
+
+    
 
     public function create()
     {   
@@ -55,7 +98,6 @@ class OrderController extends Controller
     {
         $order = Order::find($order);
         $order->update($request->updateFields());
-        $order->save();
         return redirect()->route('order.index'); 
     }
 

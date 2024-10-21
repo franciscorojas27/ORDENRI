@@ -1,0 +1,37 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API de Ejemplo",
+        "description": "Esta es una API de prueba para demostrar L5-Swagger en Laravel.",
+        "contact": {
+            "name": "Tu Nombre",
+            "email": "tuemail@example.com"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/test": {
+            "get": {
+                "tags": [
+                    "Test"
+                ],
+                "summary": "Test Route",
+                "operationId": "93fda61f8d38dc4fa714d68408cd55ce",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Test",
+            "description": "Test"
+        }
+    ]
+}

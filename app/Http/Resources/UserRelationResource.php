@@ -18,7 +18,7 @@ class UserRelationResource extends JsonResource
             'start_at' => $this->start_at,
             'end_at' => $this->end_at,
             'closed_at' => $this->closed_at,
-            'client' => optional($this->client)->only('id', 'name'),
+            'client' => optional($this->client)->only('id', 'name','last_name'),
             'applicantTo' => optional($this->applicantTo)->only('id'),
             'responsible' => optional($this->responsible)->only('id'),
             'resolutionArea' => optional($this->resolutionArea)->only('id', 'area'),

@@ -1,8 +1,11 @@
 @props(['register' => true,'job_titles', 'general_managements'])
-
+@if ($register)
 <form method="POST" action="{{ route('register') }}" class="w-full max-w-md">
+@else
+<form method="POST" action="{{ route('admin-secure.store') }}" class="w-full max-w-md">
+@endif
     @csrf
-
+    @method('POST')
     <!-- Name -->
     <div class="flex space-x-4">
         <div class="w-1/2">
@@ -68,7 +71,7 @@
         <x-text-input id="password" class="block mt-1 w-full bg-gray-700 text-white border-gray-600 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" type="password" name="password" required autocomplete="new-password" />
         <x-input-error :messages="$errors->get('password')" class="mt-2 text-red-400" />
     </div>
-
+    
     <!-- Confirm Password -->
     <div>
         <x-input-label for="password_confirmation" :value="__('Confirm Password')" class="text-white" />

@@ -1,4 +1,15 @@
 <?php return array (
+  'darkaonline/l5-swagger' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'L5Swagger\\L5SwaggerServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'L5Swagger' => 'L5Swagger\\L5SwaggerFacade',
+    ),
+  ),
   'laravel-lang/actions' => 
   array (
     'providers' => 
@@ -39,6 +50,13 @@
     'providers' => 
     array (
       0 => 'LaravelLang\\Locales\\ServiceProvider',
+    ),
+  ),
+  'laravel-lang/models' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'LaravelLang\\Models\\ServiceProvider',
     ),
   ),
   'laravel-lang/publisher' => 
