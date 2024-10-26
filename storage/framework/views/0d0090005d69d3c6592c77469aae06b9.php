@@ -1,2 +1,0 @@
-<img src="<?php echo e(asset('/logo_cantv.svg')); ?>" alt="logo cantv" desc ="logo cantv" <?php echo e($attributes); ?>>
-    <?php /**PATH C:\Users\franc\Desktop\ORDENRI\resources\views/components/application-logo.blade.php ENDPATH**/ ?>

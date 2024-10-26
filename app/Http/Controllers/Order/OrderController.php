@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Order;
 use App\Models\Status;
 use App\Models\Resolution_Area;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
@@ -59,10 +60,6 @@ class OrderController extends Controller
             'statuses' => Status::all()
         ]);
     }
-    
-
-    
-
     public function create()
     {   
         
@@ -100,7 +97,6 @@ class OrderController extends Controller
         $order->update($request->updateFields());
         return redirect()->route('order.index'); 
     }
-
     /**
      * Elimina una orden especifica de la base de datos.
      *
@@ -113,4 +109,5 @@ class OrderController extends Controller
         $order->delete();
         return redirect()->route('order.index');
     }
+    
 }

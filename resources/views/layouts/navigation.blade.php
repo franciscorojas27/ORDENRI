@@ -18,10 +18,14 @@
                     <x-nav-link :href="route('order.index')" :active="request()->routeIs('order.index')">
                         {{ __('Orders') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('admin-secure.index')" :active="request()->routeIs('admin-secure')">
+                    <x-nav-link :href="route('admin-secure.index')" :active="request()->routeIs('admin-secure.index')">
                         {{ __('Admin Secure') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('order.consultation.index')" :active="request()->routeIs('order.consultation.index')">
+                        {{ __('Service Order Consultation') }}
+                    </x-nav-link>
                     </div>
+                    
             </div>
 
             <!-- Settings Dropdown -->

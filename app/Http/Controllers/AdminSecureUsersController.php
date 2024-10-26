@@ -83,7 +83,7 @@ class AdminSecureUsersController extends Controller
     }
     public function destroy(User $user){
         $user->update(['is_deleted' => true]);
-        return redirect()->route('admin-secure');
+        return redirect()->route('admin-secure.index');
     }
     public function resetPassword(User $user){
         $user->update(['password' => Hash::make('cantv1234')]);

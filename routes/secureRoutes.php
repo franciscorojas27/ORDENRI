@@ -22,6 +22,6 @@ Route::middleware(['auth', 'verified', 'adminUserVerification','password.confirm
 
 // Route::get('/email-prueba', function () {
 //     Mail::to('arojas@cantv.com.ve')->send(new WelcomeToTheJungle());
-//     return view('email-prueba');
+//     return view('emails.lockout');
 // });
 

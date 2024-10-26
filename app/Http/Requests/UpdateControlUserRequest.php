@@ -16,7 +16,7 @@ class UpdateControlUserRequest extends FormRequest
 
     protected function failedAuthorization()
     {   
-        return redirect()->route('admin-secure');
+        return redirect()->route('admin-secure.index');
     }
 
     /**

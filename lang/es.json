@@ -319,5 +319,15 @@
     "Delete User": "Eliminar usuario",
     "Ip address": "Dirección IP",
     "Updated at": " Ultima fecha de actualización del usuario",
-    "Expiration date": "Fecha de expiración de contraseña"
+    "Expiration date": "Fecha de expiración de contraseña",
+    "Service Order Consultation": "Consulta de orden de servicio",
+    "Month": "Mes",
+    "Year": "Año",
+    "Day": "Dia",
+    "Hour": "Hora",
+    "Minute": "Minuto",
+    "Second": "Segundo",
+    "Date": "Fecha",
+    "Time": "Hora",
+    "Creation": "Fecha de creación"
 }
