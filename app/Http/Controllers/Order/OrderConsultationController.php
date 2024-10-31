@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Order;
 
 
 use App\Models\Order;
+use App\Events\OrderCreated;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Auth\Events\Lockout;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -25,11 +27,21 @@ class OrderConsultationController extends Controller
                 return redirect()->route('order.consultation.index');
             }
             $orders = Order::whereYear('created_at', $request->year)
-                ->whereMonth('created_at', $request->month)
-                ->orderBy('created_at', 'asc')
-                ->get();
+            ->whereMonth('created_at', $request->month)
+            ->orderBy('created_at', 'asc')
+            ->get();
             session()->flash('message', 'Se encontraron '. $orders->count() . ' ordenes para el mes ' . $request->month . ' del año ' . $request->year . '.');
-            return view('order-consultation.index', compact('orders'));
+            event(new OrderCreated($orders));
+
+            $getRedirectRoute = function ($order) {
+                if (request()->routeIs('order.group.index') || request()->routeIs('order.group.show')) {
+                    return route('order.group.show', $order);
+                }
+    
+                return request()->routeIs('order.consultation.index') ? route('order.consultation.show', $order) : route('order.show', $order);
+            };
+
+            return view('order-consultation.index', compact('orders','getRedirectRoute'));
         }
         return view('order-consultation.index');
 

@@ -24,47 +24,56 @@ use App\Http\Requests\UpdateControlUserRequest;
  */
 class AdminSecureUsersController extends Controller
 {/**
-     * @OA\Get(
-     *     path="/api/test",
-     *     tags={"Test"},
-     *     summary="Test Route",
-     *     @OA\Response(
-     *         response=200,
-     *         description="Successful response",
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Not Found"
-     *     )
-     * )
-     */
-    public function index(Request $request){
+ * @OA\Get(
+ *     path="/api/test",
+ *     tags={"Test"},
+ *     summary="Test Route",
+ *     @OA\Response(
+ *         response=200,
+ *         description="Successful response",
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Not Found"
+ *     )
+ * )
+ */
+    public function index(Request $request)
+    {
         
-        if($request->search){
-            $users = User::where('name', 'LIKE', "%{$request->search}%")
-            ->orderBy('id', 'asc')
-            ->paginate(10);
-            if($users->count() == 0){
+        
+        if ($request->search) {
+            $users = User::with('jobTitle', 'generalManagement')
+                ->where('name', 'LIKE', "%{$request->search}%")
+                ->orderBy('id', 'asc')
+                ->paginate(10);
+            if ($users->isEmpty()) {
                 return redirect()->route('admin-secure.index');
             }
             return view('secure.index', compact('users'));
         }
-        $users = User::orderBy('id', 
-        'asc')->paginate(10);
+        $users = User::with(['jobTitle', 'generalManagement'])->orderBy(
+            'id',
+            'asc'
+        )->paginate(10);
         return view('secure.index', compact('users'));
     }
-    public function create(){
-        return view('secure.create', ['job_titles' => JobTitle::all(),'general_managements' => GeneralManagements::all()]);
+    public function create()
+    {
+        return view('secure.create', ['job_titles' => JobTitle::all(), 'general_managements' => GeneralManagements::all()]);
     }
-    public function edit(Request $request){
+    public function edit(Request $request)
+    {
         $user = User::findOrFail($request->id);
-        return view('secure.edit', ['user' => $user, 'jobTitles' => JobTitle::all(),'generalManagements' => GeneralManagements::all()]);
+        return view('secure.edit', ['user' => $user, 'jobTitles' => JobTitle::all(), 'generalManagements' => GeneralManagements::all()]);
     }
-    public function update(User $user,UpdateControlUserRequest $request){
+    public function update(User $user, UpdateControlUserRequest $request)
+    {
         $user->update($request->all());
-        return redirect()->route('admin-secure.edit',$user);
+        return redirect()->route('admin-secure.edit', $user);
     }
-    public function store(RegisterRequest $request){
+    public function store(RegisterRequest $request)
+    {
         $user = User::create([
             'name' => $request->name,
             'last_name' => $request->last_name,
@@ -81,11 +90,13 @@ class AdminSecureUsersController extends Controller
 
         return redirect(route('admin-secure.index'));
     }
-    public function destroy(User $user){
+    public function destroy(User $user)
+    {
         $user->update(['is_deleted' => true]);
         return redirect()->route('admin-secure.index');
     }
-    public function resetPassword(User $user){
+    public function resetPassword(User $user)
+    {
         $user->update(['password' => Hash::make('cantv1234')]);
         return back();
     }

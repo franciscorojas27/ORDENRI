@@ -8,8 +8,8 @@
             <th scope="col" class="px-6 py-3">Descripcion</th>
             <th scope="col" class="px-6 py-3">Estado</th>
             <th scope="col" class="px-6 py-3"></th>
-            @canany(['isAdmin', 'isSupervisor'], Auth::user()) 
-                <th scope="col" class="px-3 py-3"> </th>
+            @canany(['isAdmin', 'isSupervisor'], Auth::user())
+                <th scope="col" class="px-3 py-3" aria-label="Acciones"> </th>
             @endcanany
         </tr>
     </thead>
@@ -25,23 +25,31 @@
                 <td class="px-6 py-4">{{ $order->client_description }}</td>
                 <td class="px-6 py-4">{{ $order->status->status }}</td>
                 <td class="px-6 py-4">
-                    <a href="{{ route('order.show', $order) }}"
+                    <a href="{{ $route($order) ?? '#' }}"
                         class="text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 py-2 px-4 rounded-md">
-                        Ver
-                    </a>
+                        {{__('Details')}}
+                    </a>    
                 </td>
-                @canany(['isAdmin', 'isSupervisor'], Auth::user()) 
+                @canany(['isAdmin', 'isSupervisor'], Auth::user())
                     <td class="px-3 py-4">
-                        <form id="delete-order-{{ $order->id }}" action="{{ route('order.destroy', $order) }}"
-                            method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <x-danger-button
-                                
-                                onclick="confirm('¿Seguro que deseas eliminar esta orden?') || event.stopImmediatePropagation()">
-                                Eliminar
-                            </x-danger-button>
-                        </form>
+                        @if (request()->routeIs('order.consultation.index'))
+                            <form id="delete-order-{{ $order->id }}">
+                                <a href="{{ route('order.consultation.download', $order) }}" target="_blank"
+                                    class="text-white bg-green-500 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 py-2 px-4 rounded-md">
+                                    {{__('Print')}}
+                                </a>
+                            </form>
+                        @else
+                            <form id="delete-order-{{ $order->id }}" action="{{ route('order.destroy', $order) }}"
+                                method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <x-danger-button
+                                    onclick="confirm('¿Seguro que deseas eliminar esta orden?') || event.stopImmediatePropagation()">
+                                    Eliminar
+                                </x-danger-button>
+                            </form>
+                        @endif
                     </td>
                 @endcanany
             </tr>

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Status;
 use Illuminate\Http\Request;
-use SaKanjo\EasyMetrics\Metrics\Value;
 
 class DashBoardController extends Controller
 {

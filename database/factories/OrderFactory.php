@@ -16,12 +16,12 @@ class OrderFactory extends Factory
      * @return array<string, mixed>
      */
     public function definition(): array
-    { 
-        $a = User::find(1);
+    {
+        $count = User::count();
         return [
-            'client_id' => 1,
-            'applicant_to_id' => 1,
-            'responsible_id' => 1,
+            'client_id' => $this->faker->numberBetween(1, $count),
+            'applicant_to_id' => $this->faker->numberBetween(1, $count),
+            'responsible_id' => $this->faker->numberBetween(1, $count),
             'resolution_area_id' => $this->faker->numberBetween(1, 4),
             'type_id' => $this->faker->numberBetween(1, 3),
             'status_id' => $this->faker->numberBetween(1, 7),

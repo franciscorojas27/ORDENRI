@@ -28,7 +28,7 @@ return new class extends Migration
             $table->boolean('is_deleted')->default(false);
             $table->boolean('is_connected')->default(false);
             $table->timestamp('email_verified_at')->nullable();
-            $table->timestamp('last_connection');
+            $table->timestamp('last_connection')->nullable();
             $table->timestamp('password_may_expire_at')->nullable();
             $table->rememberToken();
             $table->timestamps();

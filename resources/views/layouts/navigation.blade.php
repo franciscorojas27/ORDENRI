@@ -24,6 +24,9 @@
                     <x-nav-link :href="route('order.consultation.index')" :active="request()->routeIs('order.consultation.index')">
                         {{ __('Service Order Consultation') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('order.group.index')" :active="request()->routeIs('order.group.index')">
+                        {{ __('Pending orders') }}
+                    </x-nav-link>
                     </div>
                     
             </div>

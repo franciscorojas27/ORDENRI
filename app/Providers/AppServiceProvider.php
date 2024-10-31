@@ -3,10 +3,13 @@
 namespace App\Providers;
 
 use App\Models\User;
+use App\Events\OrderCreated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Listeners\SendOrderConfirmation;
 use Illuminate\Cache\RateLimiting\Limit;
 use App\Exceptions\CustomThrottleException;
 use Illuminate\Support\Facades\RateLimiter;
@@ -21,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        
+        // 
     }
 
     /**
@@ -45,5 +48,6 @@ class AppServiceProvider extends ServiceProvider
                     ]);
                 });
         });
+        
     }   
 }

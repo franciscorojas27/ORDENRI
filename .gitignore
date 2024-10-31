@@ -10,6 +10,7 @@
 .env
 index.html
 indeex.html
+.vscode
 .env.backup
 .env.production
 .phpactor.json

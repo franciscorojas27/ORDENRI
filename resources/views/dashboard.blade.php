@@ -11,6 +11,8 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <img src="{{ asset('Server_isAlive.gif') }}" alt="Server is alive" desc="Server is alive">
+
                         <x-charts.metrics-values :counts="$counts"></x-charts.metrics-values>
                     </div>
                     <h1 class="text-3xl my-2 font-bold mt-4">{{ __('Closed Orders') }}</h1>
@@ -41,5 +43,17 @@
                 </div>
             </div>
         </div>
+        {{-- <audio id="miAudio" loop controls preload="auto">
+            <source src="{{ asset('/a.mp3') }}" type="audio/mpeg">
+        </audio>
+        <script>
+            window.onload = function() {
+                var audio = document.getElementById('miAudio');
+                audio.addEventListener('canplaythrough', function() {
+                    audio.play();
+                });
+            };
+        </script> --}}
+
     </div>
 </x-app-layout>

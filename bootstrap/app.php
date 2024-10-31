@@ -11,26 +11,23 @@ use Illuminate\Http\Exceptions\ThrottleRequestsException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
-        web: __DIR__.'/../routes/web.php',
-        commands: __DIR__.'/../routes/console.php',
+        web: __DIR__ . '/../routes/web.php',
+        commands: __DIR__ . '/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware) {        
-        $middleware->alias(['clientVerified' => ClientUserVerified::class])->alias(['order.check' => RedirectIfOrderNotFound::class])->alias(['adminUserVerification' => AdminUserVerification::class]);
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->alias([
+            'subscribed' => ClientUserVerified::class
+        ]);
+        $middleware->alias([
+            'adminUserVerification' => AdminUserVerification::class
+        ]);
+        $middleware->alias([
+            'order.check' => RedirectIfOrderNotFound::class
+        ]);
+
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        // Uncomment and modify as needed
-        // $exceptions->renderable(function (ThrottleRequestsException $e, $request) {
-        //     // Create a ValidationException with a custom message
-        //     $exception = ValidationException::withMessages([
-        //         'email' => trans('auth.throttle_block'),
-        //     ]);
-
-        //     // Clear the rate limit for the user's IP address
-        //     RateLimiter::clear('limit-login:' . $request->ip());
-            
-        //     // Throw the customized exception
-        //     throw $exception; 
-        // });
+        // 
     })
     ->create();

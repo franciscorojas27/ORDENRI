@@ -9,16 +9,16 @@ use Illuminate\Queue\SerializesModels;
 class LockoutMail extends Mailable
 {
     use Queueable, SerializesModels;
-
+    public $orders;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($orders)
     {
-        // 
+        $this->orders = $orders;
     }
 
     /**
@@ -30,6 +30,6 @@ class LockoutMail extends Mailable
     {
         return $this->view('emails.lockout')
                     ->subject('Alerta de bloqueo de cuenta')
-                    ->with(['ipAddress' => "244.178.44.111", 'date' => date("d/m/Y H:i:s")]);
+                    ->with(['orders' => $this->orders]);
     }
 }

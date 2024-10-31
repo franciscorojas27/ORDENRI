@@ -329,5 +329,16 @@
     "Second": "Segundo",
     "Date": "Fecha",
     "Time": "Hora",
-    "Creation": "Fecha de creación"
+    "Creation": "Fecha de creación",
+    "Finalize order": "Finalizar orden",
+    "Accept order": "Aceptar orden",
+    "Reject order": "Rechazar orden",
+    "Finalized order": "Orden finalizada",
+    "Rejected order": "Orden rechazada",
+    "Accepted order": "Orden aceptada",
+    "Order status": "Estado de la orden",
+    "Finish order": "Finalizar orden",
+    "Print order": "Imprimir orden",
+    "Print": "Imprimir",
+    "Download order": "Descargar orden"
 }

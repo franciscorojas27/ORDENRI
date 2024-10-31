@@ -19,4 +19,7 @@ class UserPolicy
     public function isAdmin(User $user){
         return $user->hasRole('Administrador');
     }
+    public function isGroupMember(User $user,User $applicantTo){
+        return $user->isGroup() && $user->coordination_management == $applicantTo->coordination_management;
+    }
 }

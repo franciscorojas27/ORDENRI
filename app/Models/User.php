@@ -88,7 +88,10 @@ class User extends Authenticatable
     public function isDeleted(){
         return $this->is_deleted;
     }
+    public function isGroup(){
+        return $this->group;
+    }
     public function passwordRecordVerification(){
-        
+        // 
     }
 }
