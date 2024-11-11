@@ -17,7 +17,7 @@ class ClientUserVerified
     public function handle(Request $request, Closure $next): Response
     {   
         if ($request->user()->Jobtitle->title === 'Cliente') {
-            return redirect()->route('dashboard');
+            return redirect()->route('order.index');
         }
         return $next($request);
     }

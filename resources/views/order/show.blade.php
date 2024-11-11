@@ -4,6 +4,7 @@
             {{ __('Service Order') }}
         </h2>
     </x-slot>
+    @vite(['resources/js/modalShow.js'])
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6  lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
@@ -75,7 +76,7 @@
 
                 <div class="grid grid-cols-2 gap-6">
                     <div>
-                        <x-input-label for="resolution_area_id" class="mt-2" :value="__('Resolution Areas')" />
+                        <x-input-label for="resolution_area_id" class="mt-2" :value="__('Resolution Area')" />
                         <x-text-input required readonly id="resolution_area_id" class="block mt-2 w-full" type="text"
                             name="resolution_area_id" :value="old('resolution_area_id', $order->resolutionArea->area)" />
                         <x-input-error :messages="$errors->get('resolutionAreas')" class="mt-2" />
@@ -106,24 +107,33 @@
                 <form action="{{ route('order.flow', $order) }}" id="form-description" method="POST">
                     @csrf
                     @method('PUT')
+                    <x-input-label for="description" class="mt-2" :value="__('Activity')" />
 
-                    <x-input-label for="description" class="mt-2" :value="__('Activity')" class="mt-4" />
-                    <x-textarea required id="description" name="description" rows="4" cols="65"
-                        style="resize: none;" class="mt-2 block w-full">
-                        {{ old('description', $order->description) }}
-                    </x-textarea>
+                    @if (Auth::user()->jobTitle->title === 'Cliente')
+                        <x-textarea required readonly id="description" name="description" rows="4" cols="65"
+                            style="resize: none;" class="mt-2 block w-full">
+                            {{ old('description', $order->description) }}
+                        </x-textarea>
+                    @else
+                        <x-textarea required id="description" name="description" rows="4" cols="65"
+                            style="resize: none;" class="mt-2 block w-full">
+                            {{ old('description', $order->description) }}
+                        </x-textarea>
+                    @endif
+
+
                     <x-input-error :messages="$errors->get('description')" class="mt-2" />
 
                 </form>
                 <div class="flex items-center justify-between mt-4">
                     <x-link-button href="{{ $redirectRoute }}"
-                        class="{{ ($order->status_id >= 3 || $order->applicant_to_id != Auth::id()) &&
-                        !Gate::allows('isGroupMember', $order->applicantTo)
-                            ? 'mr-2 w-full justify-center'
-                            : 'mr-2' }}">
+                        class="mr-2 {{ $order->status_id >= 3 ||
+                        (Auth::user()->jobTitle->title === 'Cliente' && !Gate::allows('isGroupMember', $order->applicantTo))
+                            ? 'w-full justify-center'
+                            : '' }}">
                         {{ __('Volver') }}
                     </x-link-button>
-                    @canany(['isAdmin', 'isSupervisor', 'isAnalyzer'], Auth::user())
+                    @canany(['isAnalyzer', 'isAdmin', 'isSupervisor'], Auth::user())
                         @if ($order->status_id == 1)
                             <x-primary-button type="submit" form="form-description" class="w-full justify-center">
                                 {{ __('Accept order') }}
@@ -131,14 +141,34 @@
                         @elseif (
                             ($order->status_id == 2 && $order->applicant_to_id == Auth::id()) ||
                                 Gate::allows('isGroupMember', Auth::user(), $order->applicantTo->id))
-                            <x-primary-button type="submit" form="form-description" class="w-full justify-center">
+                            <x-primary-button type="submit" id="finishButton" form="form-description"
+                                class="w-full justify-center">
                                 {{ __('Finish order') }}
                             </x-primary-button>
                         @endif
-                    @endcan
+                    @endcanany
                 </div>
             </div>
         </div>
     </div>
-
+    <!-- Modal -->
+    <div id="finishOrderModal"
+        class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden transition-opacity duration-300 ease-in-out">
+        <div class="bg-white rounded-lg overflow-hidden shadow-xl max-w-sm w-full transform transition-transform duration-300 ease-in-out scale-75 opacity-0"
+            id="modalContent">
+            <div class="p-6">
+                <div class="flex justify-center mb-4">
+                    <svg class="h-32 w-32 text-green-600 animate-bounce" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                        <polyline points="22 4 12 14.01 9 11.01" />
+                    </svg>
+                </div>
+                <div class="text-center">
+                    <h2 class="text-2xl font-semibold mb-2">Orden finalizada exitosamente</h2>
+                    <p class="text-gray-600">Tu orden ha sido procesada y finalizada con éxito.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </x-app-layout>

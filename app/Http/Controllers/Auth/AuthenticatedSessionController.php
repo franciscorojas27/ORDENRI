@@ -31,7 +31,7 @@ class AuthenticatedSessionController extends Controller
         
         $request->session()->regenerate();
         User::find(Auth::id())->update(['ip_address' => $request->ip(), 'last_connection' => now()]);
-        return redirect()->intended(route('dashboard', absolute: false));
+        return redirect()->intended(route('order.index', absolute: false));
     }
 
     /**

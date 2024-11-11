@@ -15,31 +15,31 @@
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
                     <div class="grid grid-cols-2 gap-6">
                         <div>
-                            <x-input-label for="client_id" class="mt-2" :value="__('Applicant')" />
-                            <x-text-input required readonly id="client_id" class="block mt-2 w-full" type="text"
-                                name="client_id" :value="old('client', $order['client']['name'])" />
-                            <x-input-error :messages="$errors->get('applicant')" class="mt-2" />
-                        </div>
-
-                        <div>
                             <x-input-label for="id" class="mt-2" :value="__('N°')" />
                             <x-text-input required readonly id="id" class="block mt-2 w-full" type="text"
                                 name="id" :value="old('id', $order['id'])" />
                             <x-input-error :messages="$errors->get('id')" class="mt-2" />
                         </div>
+                        <div>
+                            <x-input-label for="client_id" class="mt-2" :value="__('Applicant')" />
+                            <x-text-input required readonly id="client_id" class="block mt-2 w-full" type="text"
+                                name="client_id" :value="old('client', $order['client']['name'] . ' ' . $order['client']['last_name'])" />
+                            <x-input-error :messages="$errors->get('applicant')" class="mt-2" />
+                        </div>
+
                     </div>
 
                     <div class="grid grid-cols-2 gap-6">
                         <div>
                             <x-input-label for="created_at" class="mt-2" :value="__('Creation date')" />
-                            <x-text-input required readonly id="created_at" class="block mt-2 w-full" type="text"
+                            <x-text-input required  id="created_at" class="block mt-2 w-full" type="text"
                                 name="created_at" :value="old('created_at', $order['created_at'])" />
                             <x-input-error :messages="$errors->get('created_at')" class="mt-2" />
                         </div>
 
                         <div>
                             <x-input-label for="start_at" class="mt-2" :value="__('Start date')" />
-                            <x-text-input required readonly id="start_at" class="block mt-2 w-full" type="text"
+                            <x-text-input required  id="start_at" class="block mt-2 w-full" type="text"
                                 name="start_at" :value="old('start_at', $order['start_at'] ? $order['start_at'] : 'No iniciado')" />
                             <x-input-error :messages="$errors->get('start_at')" class="mt-2" />
                         </div>
@@ -48,7 +48,7 @@
                     <div class="grid grid-cols-2 gap-6">
                         <div>
                             <x-input-label for="end_at" class="mt-2" :value="__('End date')" />
-                            <x-text-input required readonly id="end_at" class="block mt-2 w-full" type="text"
+                            <x-text-input required  id="end_at" class="block mt-2 w-full" type="text"
                                 name="end_at" :value="old('end_at', $order['end_at'] ? $order['end_at'] : 'No finalizado')" />
                             <x-input-error :messages="$errors->get('end_at')" class="mt-2" />
                         </div>

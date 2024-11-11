@@ -1,6 +1,6 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-mNXHW9zx.css",
+    "file": "assets/app-BTaJ0wja.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -11,7 +11,7 @@
     "isEntry": true
   },
   "resources/js/chartDashboard.js": {
-    "file": "assets/chartDashboard-ChKhe1_7.js",
+    "file": "assets/chartDashboard-8Ljy93M0.js",
     "name": "chartDashboard",
     "src": "resources/js/chartDashboard.js",
     "isEntry": true
@@ -20,6 +20,12 @@
     "file": "assets/coloredRows-CldKSXtV.js",
     "name": "coloredRows",
     "src": "resources/js/coloredRows.js",
+    "isEntry": true
+  },
+  "resources/js/modalShow.js": {
+    "file": "assets/modalShow-kWIqjMml.js",
+    "name": "modalShow",
+    "src": "resources/js/modalShow.js",
     "isEntry": true
   }
 }

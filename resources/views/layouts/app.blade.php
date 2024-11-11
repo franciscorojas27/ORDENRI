@@ -17,27 +17,31 @@
     </head>
 
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            <div class="top-0 left-0 right-0 opacity-0 animate-fade-in z-10">
-                @include('layouts.navigation')
+        <div class="min-h-screen bg-gray-100 dark:bg-gray-900 flex">
 
-                <!-- Page Heading -->
-                @isset($header)
-                    <header class="bg-white  dark:bg-gray-800 shadow">
-                        <div class="max-w-7xl  mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                            {{ $header }}
-                        </div>
-                    </header>
-                @endisset
+            <div class="fixed bg-gray-100 h-screen z-10 w-64 hidden lg:block">
+                <x-asidebar></x-asidebar>
             </div>
+            <div class="flex flex-col w-full transition-all duration-300 ml-0 lg:ml-64">
+                <div class="fixed top-0 left-0 lg:left-64 right-0 z-20">
+                    @include('layouts.navigation')
+                    @isset($header)
+                        <header class="bg-white dark:bg-gray-800 shadow">
+                            <div class="max-w-7xl mx-auto py-2 px-4 sm:px-6 lg:px-8">
+                                {{ $header }}
+                            </div>
+                        </header>
+                    @endisset
+                </div>
+                <main class="pt-32  flex-1">
+                    {{ $slot }}
+                </main>
 
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
-
+            </div>
         </div>
         <x-footer-app></x-footer-app>
+
+
     </body>
 
 </html>

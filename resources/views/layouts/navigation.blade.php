@@ -4,31 +4,37 @@
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
-                <div class="shrink-0 flex items-center">
+                <div class="sm:hidden flex items-center">
                     <a href="{{ route('dashboard') }}">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
+                {{-- <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('order.index')" :active="request()->routeIs('order.index')">
                         {{ __('Orders') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('admin-secure.index')" :active="request()->routeIs('admin-secure.index')">
-                        {{ __('Admin Secure') }}
-                    </x-nav-link>
+                    @cannot('isClient', Auth::user())
+                        <x-nav-link :href="route('order.group.index')" :active="request()->routeIs('order.group.index')">
+                            {{ __('Pending orders') }}
+                        </x-nav-link>
+                    @endcannot
                     <x-nav-link :href="route('order.consultation.index')" :active="request()->routeIs('order.consultation.index')">
                         {{ __('Service Order Consultation') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('order.group.index')" :active="request()->routeIs('order.group.index')">
-                        {{ __('Pending orders') }}
-                    </x-nav-link>
-                    </div>
-                    
+                    @can('isAdmin', Auth::user())
+                        <x-nav-link :href="route('admin-secure.index')" :active="request()->routeIs('admin-secure.index')">
+                            {{ __('Admin Secure') }}
+                        </x-nav-link>
+                    @endcan
+                    @cannot('isClient', Auth::user())
+                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                            {{ __('Dashboard') }}
+                        </x-nav-link>
+                    @endcannot
+                </div> --}}
+
             </div>
 
             <!-- Settings Dropdown -->
@@ -37,7 +43,7 @@
                     <x-slot name="trigger">
                         <button
                             class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->jobTitle->title . " | " . Auth::user()->name }}</div>
+                            <div>{{ Auth::user()->jobTitle->title . ' | ' . Auth::user()->name . ' ' . Auth::user()->last_name }}</div>
 
                             <div class="ms-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
@@ -98,7 +104,8 @@
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
             <div class="px-4">
-                <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()->jobTitle->title . " | " . Auth::user()->name }}</div>
+                <div class="font-medium text-base text-gray-800 dark:text-gray-200">
+                    {{ Auth::user()->jobTitle->title . ' | ' . Auth::user()->name }}</div>
                 <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
             </div>
 

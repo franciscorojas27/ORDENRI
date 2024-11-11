@@ -23,7 +23,6 @@ class StoreOrderRequest extends FormRequest
     {
         return [
             'user_id' => ['required', 'string', 'max:100','exists:users,id'],
-            'client' => ['required', 'string', 'max:255','exists:users,name'],
             'resolution_areas' => ['required', 'string', 'max:255','exists:resolution__areas,id'],
             'types' => ['required', 'string', 'max:255','exists:types,id'],
             'description' => ['required', 'string', 'max:500'],

@@ -22,4 +22,7 @@ class UserPolicy
     public function isGroupMember(User $user,User $applicantTo){
         return $user->isGroup() && $user->coordination_management == $applicantTo->coordination_management;
     }
+    public function canCreateOrder(User $user){
+        return $user->can_create_orders;
+    }
 }

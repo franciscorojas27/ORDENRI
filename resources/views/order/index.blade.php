@@ -8,9 +8,12 @@
                     {{ __('Services orders') }}
                 @endif
             </h2>
-            <a href="{{ route('order.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                {{ __('Create Order') }}
-            </a>
+            @can('canCreateOrder', Auth::user())
+                <a href="{{ route('order.create') }}"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    {{ __('Create Order') }}
+                </a>
+            @endcan
         </div>
     </x-slot>
 
@@ -58,7 +61,7 @@
                                 <form action="{{ route('order.index') }}" method="GET">
                                     <x-input-label for="type"
                                         class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                                        :value="__('Type')" />
+                                        :value="__('Types')" />
                                     <div class="relative">
                                         <select id="type" name="type"
                                             class="block py-3 pl-10 pr-3 w-full text-base text-black bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-indigo-500 dark:bg-gray-800"

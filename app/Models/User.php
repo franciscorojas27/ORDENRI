@@ -29,6 +29,8 @@ class User extends Authenticatable
         'is_blocked',
         'group',
         'is_deleted',
+        'resolution_area_id',
+        'can_create_orders',
         'coordination_management',
         'password_may_expire_at',
         'password_may_expire',
@@ -70,14 +72,25 @@ class User extends Authenticatable
     public function generalManagement(){
         return $this->belongsTo(GeneralManagements::class, 'general_management_id');
     }
+    public function resolutionArea(){
+        return $this->belongsTo(Resolution_Area::class, 'resolution_area_id');
+    }
     public function passwordRecords()
     {
         return $this->hasMany(PasswordRecords::class);
     }
-    
     public function hasRole($job)  
     {
         return $this->jobTitle->title === $job;
+    }
+    public function isSupervisor(){
+        return $this->hasRole('Supervisor');
+    }
+    public function isAdmin(){
+        return $this->hasRole('Administrador');
+    }
+    public function isCLient(){
+        return $this->hasRole('Cliente');
     }
     public function isBlocked(){
         return $this->is_blocked;

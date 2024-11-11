@@ -8,17 +8,17 @@
 
     <div class="py-12 bg-gray-100 dark:bg-gray-900">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div  class="bg-gray-50  dark:bg-gray-800 shadow-lg sm:rounded-lg p-6">
+            <div class="bg-gray-50  dark:bg-gray-800 shadow-lg sm:rounded-lg p-6">
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                    <form action="{{route('admin-secure.update', $user)}}" method="POST" id="user-form" class="contents">
+                    <form action="{{ route('admin-secure.update', $user) }}" method="POST" id="user-form" class="contents">
                         @csrf
                         @method('PUT')
                         <!-- Name -->
                         <div
                             class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 p-4 shadow-md rounded-lg">
                             <x-input-label for="name" :value="__('Name')" />
-                            <x-text-input required id="name" class="block mt-2 w-full" type="text" name="name"
-                                :value="old('name', $user->name)" />
+                            <x-text-input required id="name" class="block mt-2 w-full" type="text"
+                                name="name" :value="old('name', $user->name)" />
                             <x-input-error :messages="$errors->get('name')" class="mt-2" />
                         </div>
 
@@ -107,13 +107,43 @@
                             </select>
                             <x-input-error :messages="$errors->get('job_title_id')" class="mt-2" />
                         </div>
-
+                        <!-- User Resolution area -->
+                        <div
+                            class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 p-4 shadow-md rounded-lg">
+                            <x-input-label for="resolution_area_id" :value="__('Resolution area')" />
+                            <select name="resolution_area_id" id="resolution_area_id"
+                                class="block mt-2 w-full text-black rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                <option value="" disabled
+                                    {{ is_null($user->resolutionArea->id) ? 'selected' : '' }}>
+                                    {{ __('Select an option') }}</option>
+                                @foreach ($resolutionAreas as $resolutionArea)
+                                    <option value="{{ $resolutionArea->id }}"
+                                        {{ $user->resolutionArea->id == $resolutionArea->id ? 'selected' : '' }}>
+                                        {{ $resolutionArea->area }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <x-input-error :messages="$errors->get('resolution_area_id')" class="mt-2" />
+                        </div>
+                        <!--  Can insert orders -->
+                        <div
+                            class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 p-4 shadow-md rounded-lg">
+                            <x-input-label for="can_create_orders" :value="__('Can create orders')" />
+                            <select id="can_create_orders"
+                                class="block mt-2 w-full text-black rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                name="can_create_orders">
+                                <option value="0"
+                                    {{ old('can_create_orders', $user->can_create_orders) == '0' ? 'selected' : '' }}>No</option>
+                                <option value="1"
+                                    {{ old('can_create_orders', $user->can_create_orders) == '1' ? 'selected' : '' }}>Sí</option>
+                            </select>
+                        </div>
                         <!-- Coordination/Management -->
                         <div
                             class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 p-4 shadow-md rounded-lg">
                             <x-input-label for="coordination_management" :value="__('Coordination/Management')" />
-                            <x-text-input readonly id="coordination_management" class="block mt-2 w-full" type="text"
-                                name="coordination_management" :value="old('coordination_management', $user->coordination_management)" />
+                            <x-text-input readonly id="coordination_management" class="block mt-2 w-full"
+                                type="text" name="coordination_management" :value="old('coordination_management', $user->coordination_management)" />
                             <x-input-error :messages="$errors->get('coordination_management')" class="mt-2" />
                         </div>
 
@@ -181,7 +211,7 @@
                     </form>
 
                     <div class="flex flex-wrap justify-end gap-4 mt-4 col-span-full">
-                    
+
                         <button type="submit" form="user-form"
                             class="inline-flex justify-center items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:outline-none focus:border-gray-700 dark:focus:border-gray-300 focus:ring focus:ring-gray-200 dark:focus:ring-gray-800 transition ease-in-out duration-150 flex-none">
                             {{ __('Save') }}
@@ -205,7 +235,8 @@
                                 {{ __('Delete User') }}
                             </button>
                         </form>
-                        <a href="{{route('admin-secure.index')}}" class="flex-none inline-flex justify-center items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 focus:outline-none focus:border-red-700 focus:ring focus:ring-red-200 disabled:opacity-25 transition ease-in-out duration-150">
+                        <a href="{{ route('admin-secure.index') }}"
+                            class="flex-none inline-flex justify-center items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 focus:outline-none focus:border-red-700 focus:ring focus:ring-red-200 disabled:opacity-25 transition ease-in-out duration-150">
                             {{ __('Cancel') }}
                         </a>
                     </div>

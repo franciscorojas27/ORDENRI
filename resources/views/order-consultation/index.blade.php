@@ -27,8 +27,10 @@
                                             selected>-- {{ __('Selecciona un mes') }} --</option>
                                         @foreach (range(1, 12) as $month)
                                             <option value="{{ $month }}">
-                                                {{ strftime('%B', mktime(0, 0, 0, $month, 1)) }}</option>
+                                                {{ date('F', mktime(0, 0, 0, $month, 1)) }}
+                                            </option>
                                         @endforeach
+
                                     </select>
                                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                         <svg class="w-5 h-5 text-gray-500 dark:text-gray-400"

@@ -49,7 +49,9 @@ class orderGroupController extends Controller
             'types' => Type::all(),
             'resolution_areas' => Resolution_Area::all(),
             'statuses' => Status::all(),
-            'getRedirectRoute' => $getRedirectRouteToShow
+            'getRedirectRoute' => function ($order) {
+                return OrderController::getRedirectRouteToShow($order);
+            }
         ]);
     }
 }

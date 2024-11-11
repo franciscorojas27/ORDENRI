@@ -14,7 +14,7 @@
                         <x-input-label for="client" class="mt-1" :value="__('Applicant')" />
                         <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
                         <x-text-input id="client" class="block mt-1 w-full" type="text" name="client"
-                            :value="old('client', Auth::user()->name)" readonly  />
+                            :value="old('client', Auth::user()->name . ' ' . Auth::user()->last_name)" readonly  />
                         <x-input-error :messages="$errors->get('client')" class="mt-2" />
                         <x-input-label for="resolution_areas" class="mt-4" :value="__('Resolution Area')" />
                         <select id="resolution_areas" name="resolution_areas"

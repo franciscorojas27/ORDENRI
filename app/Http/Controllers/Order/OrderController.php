@@ -17,11 +17,30 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Order::query()->with('applicantTo','type','resolutionArea','status');
+        if (Auth::user()->jobTitle->title === 'Cliente') {
+
+            $ordersIds = Order::where('client_id', Auth::user()->id)->pluck('id');
+
+            $query = Order::with('applicantTo', 'type', 'resolutionArea', 'status')
+                ->whereIn('id', $ordersIds)
+                ->orderBy('id', 'asc');
+
+            return view('order.index', [
+                'orders' => $query->paginate(10),
+                'types' => Type::all(),
+                'resolution_areas' => Resolution_Area::all(),
+                'statuses' => Status::all(),
+                'getRedirectRoute' => function ($order) {
+                    return $this->getRedirectRouteToShow($order);
+                }
+            ]);
+        }
+
+        $query = Order::query()->with('applicantTo', 'type', 'resolutionArea', 'status');
 
         $message = $this->applyFilters($request, $query);
 
-        $orders = $query->orderBy('id', 'asc')->paginate(10);
+        $orders = $query->orderBy('id', 'asc')->paginate(30);
 
         if ($orders->isEmpty()) {
             $errorMessage = $this->getEmptyOrdersMessage($request);
@@ -59,6 +78,10 @@ class OrderController extends Controller
             'client_description' => $request->description,
             'status_id' => 1
         ]);
+        // $users = User::all();
+        // foreach ($users as $user) {
+        //     Queue::push(new SendNewOrderCreatedEmail($user->email));
+        // }
         return redirect()->route('order.index');
     }
 
@@ -74,10 +97,9 @@ class OrderController extends Controller
         return view('order.edit', ['RST' => $order::getSelectOptions(), 'order' => $order->getUserRelationsAttribute(), 'users' => User::getBasicUserInfo()]);
     }
 
-    public function update(UpdateOrderRequest $request, $order)
+    public function update(UpdateOrderRequest $request,Order $order)
     {
-        $order = Order::find($order);
-        $order->update($request->updateFields());
+        $order->update( $request->updateFields());
         return redirect()->route('order.index');
     }
     /**
@@ -94,8 +116,7 @@ class OrderController extends Controller
     }
 
     public function orderFlow(Order $order, Request $request)
-    {   
-        $routeName = request()->route()->getName();
+    {
         $request->validate([
             'description' => 'required|min:10|max:500',
         ]);
@@ -115,7 +136,7 @@ class OrderController extends Controller
         }
         $order->update($updateData);
 
-        return redirect()->route($routeName);
+        return redirect()->route('order.index');
     }
     public function getRedirectRouteToIndex()
     {
@@ -153,7 +174,7 @@ class OrderController extends Controller
             default => 'No se encontraron órdenes.'
         };
     }
-      public function getRedirectRouteToShow(?Order $order = null)
+    public static function getRedirectRouteToShow(?Order $order = null)
     {
         if (request()->routeIs('order.group.index') || request()->routeIs('order.group.show')) {
             return route('order.group.show', $order);

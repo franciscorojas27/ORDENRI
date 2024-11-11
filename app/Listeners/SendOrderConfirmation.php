@@ -26,7 +26,7 @@ class SendOrderConfirmation
      */
     public function handle(OrderCreated $event): void
     {
-        Mail::to('destinatario@example.com')->send(new LockoutMail($event->orders));
+        Mail::to('arojas@cantv.com.ve')->send(new LockoutMail($event->orders));
 
     }
 }

@@ -1,37 +1,22 @@
 <?php
 use App\Models\User;
+use App\Models\Order;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashBoardController;
 
-
-// Route::get('/music', [MusicController::class, 'index'])->name('music.index');
-// Route::get('/music/stream/{filename}', function ($filename) {
-//     if (Storage::disk('local')->exists('audio/' . $filename)) {
-//         return response()->file(Storage::disk('local')->path('audio/' . $filename));
-//     }
-//     abort(404);
-// })->name('music.stream');
-// Route::post('/chatbot', [ChatbotController::class, 'chat'])->name('chatbot');
-DB::listen(function ($query) {
-    dump($query->sql);
-});
 Route::get('/chat', function () {
-    return  Storage::disk('local')->files('audio');
+    return Storage::disk('local')->files('audio');
 });
-
-
 Route::get('/', function () {
-    $user = User::where('email','=','franciscoantonior30@gmail.com')->first();
-    $user->update(['password' => bcrypt('123456789')]);
-    return $user;
+    return Auth::user()->can_create_orders;
 });
 
-Route::get('/dashboard', [DashBoardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'clientVerified'])->group(function () {
+    Route::get('/dashboard', [DashBoardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -40,10 +25,10 @@ Route::get('/404', function () {
     return view('error.404');
 })->middleware(['auth', 'verified'])->name('404');
 
-require __DIR__.'/auth.php';
-require __DIR__.'/orders.php';
-require __DIR__.'/metrics.php';
-require __DIR__.'/secureRoutes.php';
+require __DIR__ . '/auth.php';
+require __DIR__ . '/orders.php';
+require __DIR__ . '/metrics.php';
+require __DIR__ . '/secureRoutes.php';
 
 Route::fallback(function () {
     return redirect()->route('404');

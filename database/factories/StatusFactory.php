@@ -30,7 +30,6 @@ class StatusFactory extends Factory
             'Evaluación',
             'Rechazada',
             'Anulada',
-            'Cerrada',
         ];
 
         // Crea un array para almacenar los estados generados

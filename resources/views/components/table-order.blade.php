@@ -22,10 +22,10 @@
                 <td class="px-6 py-4">
                     {{ $order->created_at->format('d/m/Y') }}<br>{{ $order->created_at->format('H:i') }}
                 </td>
-                <td class="px-6 py-4">{{ $order->client_description }}</td>
+                <td class="px-6 py-4">{{ Str::words($order->client_description, 15) }}</td>
                 <td class="px-6 py-4">{{ $order->status->status }}</td>
                 <td class="px-6 py-4">
-                    <a href="{{ $route($order) ?? '#' }}"
+                    <a href="{{ Auth::user()->isSupervisor() || Auth::user()->isAdmin() ? route('order.edit', $order) : $route($order) }}"
                         class="text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 py-2 px-4 rounded-md">
                         {{__('Details')}}
                     </a>    

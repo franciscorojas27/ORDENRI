@@ -31,6 +31,8 @@ class UserFactory extends Factory
             'phone' => fake()->phoneNumber(),
             'ip_address' => fake()->ipv4(),
             'group' => fake()->boolean(),
+            'can_create_orders' => fake()->boolean(),
+            'resolution_area_id' => fake()->numberBetween(1, 4),
             'coordination_management' => fake()->unique()->company(),
             'password_may_expire_at' => fake()->dateTimeBetween('-1 years', '+1 years'),
             'last_connection' => fake()->dateTimeBetween('-1 years', '+1 years'),

@@ -10,7 +10,8 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
                     <div class="flex justify-center">
-                        <x-register-layout :register="false" :job_titles="$job_titles" :general_managements="$general_managements"></x-register-layout>
+                        <x-register-layout :register="false" :job_titles="$job_titles"
+                            :resolution_areas="$resolution_areas" :general_managements="$general_managements"></x-register-layout>
                     </div>
                 </div>
             </div>

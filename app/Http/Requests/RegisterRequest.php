@@ -23,10 +23,11 @@ class RegisterRequest extends FormRequest
      */
     public function rules()
 {
+    // 'job_title' => ['required', 'integer', 'exists:job_titles,id', 'min:1'],
     return [
         'name' => ['required', 'string', 'max:50', 'alpha'],
+        'resolution_area' => ['required', 'integer', 'exists:resolution__areas,id', 'min:1'],
         'last_name' => ['required', 'string', 'max:50', 'alpha'],
-        'job_title' => ['required', 'integer', 'exists:job_titles,id', 'min:1'],
         'phone' => ['required', 'string', 'max:25', 'regex:/^[\d-]+$/'],
         'coordination_management' => ['required', 'string', 'regex:/^[a-zA-Z\s]+$/'],
         'general_management' => ['required', 'integer', 'exists:general_managements,id', 'min:1'],
@@ -40,6 +41,9 @@ public function messages()
     return [
         'name.required' => 'El campo nombre es obligatorio.',
         'last_name.required' => 'El campo apellido es obligatorio.',
+        'resolution_area.required' => 'El campo area de resolución es obligatorio.',
+        'resolution_area.exists' => 'La area de resolución seleccionada no existe.',
+        'resolution_area.min' => 'La area de resolución seleccionada no existe.',
         'job_title.required' => 'El campo cargo es obligatorio.',
         'job_title.exists' => 'El cargo seleccionado no existe.',
         'phone.required' => 'El campo teléfono es obligatorio.',
@@ -63,6 +67,7 @@ public function attributes()
         'last_name' => 'apellido',
         'job_title' => 'cargo',
         'phone' => 'teléfono',
+        'resolution_area' => 'area de resolución',
         'coordination_management' => 'gerencia de coordinación',
         'general_management' => 'gerencia general',
         'email' => 'correo electrónico',

@@ -24,7 +24,7 @@ class OrderFactory extends Factory
             'responsible_id' => $this->faker->numberBetween(1, $count),
             'resolution_area_id' => $this->faker->numberBetween(1, 4),
             'type_id' => $this->faker->numberBetween(1, 3),
-            'status_id' => $this->faker->numberBetween(1, 7),
+            'status_id' => $this->faker->numberBetween(1, 6),
             'client_description' => $this->faker->text(400),
             'description' => $this->faker->text(400),
             'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),

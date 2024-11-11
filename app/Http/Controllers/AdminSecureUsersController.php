@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\JobTitle;
 use Illuminate\Http\Request;
+use App\Models\Resolution_Area;
 use App\Models\GeneralManagements;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\RegisterRequest;
@@ -40,8 +41,8 @@ class AdminSecureUsersController extends Controller
  */
     public function index(Request $request)
     {
-        
-        
+
+
         if ($request->search) {
             $users = User::with('jobTitle', 'generalManagement')
                 ->where('name', 'LIKE', "%{$request->search}%")
@@ -60,12 +61,12 @@ class AdminSecureUsersController extends Controller
     }
     public function create()
     {
-        return view('secure.create', ['job_titles' => JobTitle::all(), 'general_managements' => GeneralManagements::all()]);
+        return view('secure.create', ['job_titles' => JobTitle::all(), 'resolution_areas' => Resolution_Area::all(), 'general_managements' => GeneralManagements::all()]);
     }
     public function edit(Request $request)
     {
         $user = User::findOrFail($request->id);
-        return view('secure.edit', ['user' => $user, 'jobTitles' => JobTitle::all(), 'generalManagements' => GeneralManagements::all()]);
+        return view('secure.edit', ['user' => $user, 'jobTitles' => JobTitle::all(), 'generalManagements' => GeneralManagements::all(), 'resolutionAreas' => Resolution_Area::all()]);
     }
     public function update(User $user, UpdateControlUserRequest $request)
     {
@@ -78,6 +79,7 @@ class AdminSecureUsersController extends Controller
             'name' => $request->name,
             'last_name' => $request->last_name,
             'job_title_id' => $request->job_title,
+            'resolution_area_id' => $request->resolution_area,
             'phone' => $request->phone,
             'ip_address' => $request->ip(),
             'coordination_management' => $request->coordination_management,

@@ -4,8 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -18,13 +17,15 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->ipAddress('ip_address')->nullable();
             $table->string('phone')->nullable();
-            $table->foreignId('job_title_id')->constrained();  
-            $table->foreignId('general_management_id')->constrained(); 
+            $table->foreignId('job_title_id')->constrained();
+            $table->foreignId('general_management_id')->constrained();
             $table->string('password');
             $table->boolean('group')->default(false);
+            $table->foreignId('resolution_area_id')->constrained('resolution__areas');
             $table->string('coordination_management');
             $table->boolean('password_may_expire')->default(false);
             $table->boolean('is_blocked')->default(false);
+            $table->boolean('can_create_orders')->default(false);
             $table->boolean('is_deleted')->default(false);
             $table->boolean('is_connected')->default(false);
             $table->timestamp('email_verified_at')->nullable();
@@ -54,7 +55,7 @@ return new class extends Migration
             $table->string('password');
             $table->timestamps();
         });
-    }   
+    }
 
     /**
      * Reverse the migrations.

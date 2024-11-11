@@ -19,9 +19,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('orders/{order}/edit', [OrderController::class, 'edit'])->name('order.edit');
         Route::put('orders/{order}/edit', [OrderController::class, 'update'])->name('order.update');
         Route::delete('orders/{order}', [OrderController::class, 'destroy'])->name('order.destroy');
+        Route::get('group/orders/', [orderGroupController::class, 'index'])->name('order.group.index');
+        Route::get('group/orders/{order}', [OrderController::class, 'show'])->name('order.group.show');
     });
-    Route::get('group/orders/', [orderGroupController::class, 'index'])->name('order.group.index');
-    Route::get('group/orders/{order}', [OrderController::class, 'show'])->name('order.group.show');
     
 
     Route::get('orders/consultation/index', [OrderConsultationController::class, 'index'])->name('order.consultation.index');

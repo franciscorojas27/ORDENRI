@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@layer utilities {
+    .grid-areas-layout {
+        grid-template-areas:
+            "header header header"
+            "aside main main"
+            "footer footer footer";
+    }
+    .grid-in-header {
+        grid-area: header;
+    }
+    .grid-in-aside {
+        grid-area: aside;
+    }
+    .grid-in-main {
+        grid-area: main;
+    }
+    .grid-in-footer {
+        grid-area: footer;
+    }
+}
