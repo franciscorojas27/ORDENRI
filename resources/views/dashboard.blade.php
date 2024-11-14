@@ -2,7 +2,7 @@
     @vite(['resources/js/chartDashboard.js'])
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Dashboard') }}
+            {{ __('Statistics') }}
         </h2>
     </x-slot>
 

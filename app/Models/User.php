@@ -5,7 +5,8 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\GeneralManagements;
 use Illuminate\Notifications\Notifiable;
-use \Illuminate\Database\Eloquent\Builder; 
+use \Illuminate\Database\Eloquent\Builder;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
@@ -20,6 +21,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'last_name',
+        'userid',
         'email',
         'job_title_id',
         'password',
@@ -63,48 +65,68 @@ class User extends Authenticatable
     }
     public static function getBasicUserInfo()
     {
-        return self::select('id', 'name', 'job_title_id','last_name')->get();
+        return self::select('id', 'name', 'job_title_id', 'last_name')->get();
     }
     public function jobTitle()
     {
-    return $this->belongsTo(JobTitle::class, 'job_title_id');
+        return $this->belongsTo(JobTitle::class, 'job_title_id');
     }
-    public function generalManagement(){
+    public function generalManagement()
+    {
         return $this->belongsTo(GeneralManagements::class, 'general_management_id');
     }
-    public function resolutionArea(){
+    public function resolutionArea()
+    {
         return $this->belongsTo(Resolution_Area::class, 'resolution_area_id');
     }
     public function passwordRecords()
     {
         return $this->hasMany(PasswordRecords::class);
     }
-    public function hasRole($job)  
+    public function hasRole($job)
     {
         return $this->jobTitle->title === $job;
     }
-    public function isSupervisor(){
+    public function isSupervisor()
+    {
         return $this->hasRole('Supervisor');
     }
-    public function isAdmin(){
+    public function isAdmin()
+    {
         return $this->hasRole('Administrador');
     }
-    public function isCLient(){
+    public function isCLient()
+    {
         return $this->hasRole('Cliente');
     }
-    public function isBlocked(){
+    public function isBlocked()
+    {
         return $this->is_blocked;
     }
-    public function atValidate(){
+    public function atValidate()
+    {
         return $this->updated_at->diffInDays(now()) >= 30;
     }
-    public function isDeleted(){
+    public function isDeleted()
+    {
         return $this->is_deleted;
     }
-    public function isGroup(){
+    public function isGroup()
+    {
         return $this->group;
     }
-    public function passwordRecordVerification(){
+    public function passwordRecordVerification()
+    {
         // 
     }
+    public function setEmailAttribute($value)
+    {
+        $userid = substr($value, 0, strpos($value, '@'));
+        if (strlen($userid) > 8) {
+            throw ValidationException::withMessages(['email' => 'La parte del correo antes del @ no puede ser mayor a 8 caracteres.']);
+        }
+        $this->attributes['email'] = $value;
+        $this->attributes['userid'] = $userid;
+    }
+
 }

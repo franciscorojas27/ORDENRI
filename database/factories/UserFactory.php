@@ -27,7 +27,8 @@ class UserFactory extends Factory
         return [
             'name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
-            'email' => fake()->unique()->safeEmail(),
+            'email' => fake()->unique()->lexify('???????') . '@gmail.com',
+            'userid' => Str::lower(fake()->unique()->lexify('???????')),
             'phone' => fake()->phoneNumber(),
             'ip_address' => fake()->ipv4(),
             'group' => fake()->boolean(),

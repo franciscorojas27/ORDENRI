@@ -342,5 +342,7 @@
     "Print order": "Imprimir orden",
     "Print": "Imprimir",
     "Download order": "Descargar orden",
-    "Can create orders": "Puede crear ordenes"
+    "Can create orders": "Puede crear ordenes",
+    "Statistics": "Estadísticas",
+    "userid": "usuario"
 }

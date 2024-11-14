@@ -3,7 +3,7 @@
         <a href="{{ route('dashboard') }}">
             <div>
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                    {{ __('Numero de :attribute', ['attribute' => __($key)]) }}</h3>
+                    {{ __('Ordenes de servicio :attribute', ['attribute' => __($key)]) }}</h3>
                 <p class="text-3xl font-bold mt-2">{{ $count }}</p>
             </div>    
         </a>

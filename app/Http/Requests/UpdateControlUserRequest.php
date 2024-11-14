@@ -29,6 +29,7 @@ class UpdateControlUserRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:50', 'alpha'],
             'last_name' => ['required', 'string', 'max:50', 'alpha'],
+            'userid' => ['required', 'string', 'max:8', 'unique:users,userid'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255'],
             'job_title_id' => ['required', 'exists:job_titles,id', 'integer', 'min:1'],
             'phone' => ['required', 'string', 'max:25', 'regex:/^[\d\+\-\.\s]+$/'],

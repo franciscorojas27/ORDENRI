@@ -1,5 +1,5 @@
 <table class="min-w-[700px] w-full text-sm text-left select-text text-gray-900 dark:text-gray-100">
-    <thead class="text-xs dark:text-gray-400 uppercase bg-blue-600  dark:bg-gray-700">
+    <thead class="text-xs dark:text-white uppercase bg-blue-500 text-white dark:bg-gray-700">
         <tr>
             <th scope="col" class="px-6 py-3">N° orden</th>
             <th scope="col" class="px-6 py-3">Tipo</th>

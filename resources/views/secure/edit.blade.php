@@ -55,7 +55,14 @@
                                 name="last_connection" :value="old('last_connection', $user->last_connection)" />
                             <x-input-error :messages="$errors->get('last_connection')" class="mt-2" />
                         </div>
-
+                        <!-- userid -->
+                        <div
+                            class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 p-4 shadow-md rounded-lg">
+                            <x-input-label for="userid" :value="__('User ID')" />
+                            <x-text-input  id="userid" class="block mt-2 w-full" type="text"
+                                name="userid" :value="old('userid', $user->userid)" />
+                            <x-input-error :messages="$errors->get('userid')" class="mt-2" />
+                        </div>
                         <!-- Phone -->
                         <div
                             class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 p-4 shadow-md rounded-lg">

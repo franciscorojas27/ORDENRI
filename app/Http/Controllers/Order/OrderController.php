@@ -7,8 +7,10 @@ use App\Models\User;
 use App\Models\Order;
 use App\Models\Status;
 use Illuminate\Http\Request;
+use App\Mail\OrderStartEndMail;
 use App\Models\Resolution_Area;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 use \Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
@@ -40,7 +42,7 @@ class OrderController extends Controller
 
         $message = $this->applyFilters($request, $query);
 
-        $orders = $query->orderBy('id', 'asc')->paginate(30);
+        $orders = $query->orderBy('id', 'desc')->paginate(30);
 
         if ($orders->isEmpty()) {
             $errorMessage = $this->getEmptyOrdersMessage($request);
@@ -71,17 +73,23 @@ class OrderController extends Controller
 
     public function store(StoreOrderRequest $request)
     {
-        Order::create([
+        $order = Order::create([
             'client_id' => $request->input('user_id'),
             'resolution_area_id' => $request->input('resolution_areas'),
             'type_id' => $request->input('types'),
             'client_description' => $request->description,
             'status_id' => 1
         ]);
-        // $users = User::all();
-        // foreach ($users as $user) {
-        //     Queue::push(new SendNewOrderCreatedEmail($user->email));
-        // }
+        $order->load(['client', 'applicantTo', 'responsible']);
+        $emails = collect([
+            $order->client?->email,
+            $order->applicantTo?->email,
+            $order->responsible?->email,
+            'arojas@cantv.com.ve'
+        ])->filter()
+            ->concat(User::where('resolution_area_id', $order->resolution_area_id)
+                ->pluck('email'));
+        Mail::to($emails)->queue(new OrderStartEndMail($order));
         return redirect()->route('order.index');
     }
 
@@ -97,9 +105,19 @@ class OrderController extends Controller
         return view('order.edit', ['RST' => $order::getSelectOptions(), 'order' => $order->getUserRelationsAttribute(), 'users' => User::getBasicUserInfo()]);
     }
 
-    public function update(UpdateOrderRequest $request,Order $order)
+    public function update(UpdateOrderRequest $request, Order $order)
     {
-        $order->update( $request->updateFields());
+        $order->update($request->updateFields());
+        $order->load(['client', 'applicantTo', 'responsible']);
+        $emails = collect([
+            $order->client?->email,
+            $order->applicantTo?->email,
+            $order->responsible?->email,
+            'arojas@cantv.com.ve'
+        ])->filter()
+            ->concat(User::where('resolution_area_id', $order->resolution_area_id)
+                ->pluck('email'));
+        Mail::to($emails)->queue(new OrderStartEndMail($order));
         return redirect()->route('order.index');
     }
     /**
@@ -120,7 +138,6 @@ class OrderController extends Controller
         $request->validate([
             'description' => 'required|min:10|max:500',
         ]);
-
         $updateData = ['description' => $request->description];
 
         switch ($order->status_id) {
@@ -135,6 +152,16 @@ class OrderController extends Controller
                 break;
         }
         $order->update($updateData);
+        $order->load(['client', 'applicantTo', 'responsible']);
+        $emails = collect([
+            $order->client?->email,
+            $order->applicantTo?->email,
+            $order->responsible?->email,
+            'arojas@cantv.com.ve'
+        ])->filter()
+            ->concat(User::where('resolution_area_id', $order->resolution_area_id)
+                ->pluck('email'));
+        Mail::to($emails)->queue(new OrderStartEndMail($order));
 
         return redirect()->route('order.index');
     }

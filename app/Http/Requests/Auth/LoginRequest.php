@@ -34,11 +34,23 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            // 'email' => ['required', 'string', 'email'],
+            'userid' => ['required', 'string', 'max:8','exists:users,userid'],
             'password' => ['required', 'string', 'min:8', 'max:20'],
         ];
     }
-
+    
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return [
+            'userid' => 'usuario',
+        ];
+    }
     /**
      * Attempt to authenticate the request's credentials.
      *
@@ -46,15 +58,18 @@ class LoginRequest extends FormRequest
      */
     public function authenticate(): void
     {
-        $this->validationValuesLogin();
+        $user = User::where('userid', $this->input('userid'))->first();
+        if ($user) {
+            $this->merge(['email' => $user->email]);
+        }
+        $this->validationValuesLogin($user);
         $this->checkRateLimits();
-
         if (!Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKeyIp());
             RateLimiter::hit($this->throttleKeyEmail());
             if (config('custom.login_max_attempts_before_block', 3) == RateLimiter::attempts($this->throttleKeyIp())) {
                 throw ValidationException::withMessages([
-                    'email' => trans('auth.throttle_login_before_block', [
+                    'userid' => trans('auth.throttle_login_before_block', [
                         'intentos' => config('custom.login_max_attempts', 5) - config('custom.login_max_attempts_before_block', 3),
                     ]),
                 ]);
@@ -85,7 +100,7 @@ class LoginRequest extends FormRequest
             }
 
             throw ValidationException::withMessages([
-                'email' => trans('auth.throttle_block'),
+                'userid' => trans('auth.throttle_block'),
             ]);
         }
     }
@@ -115,29 +130,28 @@ class LoginRequest extends FormRequest
      */
     public function throttleKeyEmail(): string
     {
-        return Str::transliterate(Str::lower($this->string('email')));
+        return Str::transliterate(Str::lower($this->email));
     }
 
     public function throttleKeyIp(): string
     {
         return Str::transliterate($this->ip());
     }
-    protected function validationValuesLogin()
+    protected function validationValuesLogin(User $user)
     {
-        $user = User::whereEmail($this->input('email'))->first();
         if ($user?->isDeleted()) {
             throw ValidationException::withMessages([
-                'email' => 'Esta cuenta no existe, si existe un problema con su cuenta por favor contacte con el administrador',
+                'userid' => 'Esta cuenta no existe, si existe un problema con su cuenta por favor contacte con el administrador',
             ]);
         }
         if ($user?->isBlocked()) {
             throw ValidationException::withMessages([
-                'email' => 'Su cuenta está bloqueada',
+                'userid' => 'Su cuenta está bloqueada',
             ]);
         }
         if ($user?->atValidate()) {
             throw ValidationException::withMessages([
-                'email' => 'La clave no ha sido actualizada hace más de 30 días',
+                'userid' => 'La clave no ha sido actualizada hace más de 30 días',
             ]);
         }
         return null;
@@ -146,6 +160,6 @@ class LoginRequest extends FormRequest
 
     protected function userExists()
     {
-        return User::whereEmail($this->string('email'))->first();
+        return User::whereEmail($this->email)->first();
     }
 }

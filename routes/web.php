@@ -1,19 +1,30 @@
 <?php
 use App\Models\User;
 use App\Models\Order;
+use App\Mail\OrderStartEndMail;
+use App\Mail\WelcomeToTheJungle;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashBoardController;
 
-Route::get('/chat', function () {
-    return Storage::disk('local')->files('audio');
-});
-Route::get('/', function () {
-    return Auth::user()->can_create_orders;
-});
+// Route::get('/chat', function () {
+//     $order = Order::with(['client', 'applicantTo', 'responsible'])->findOrFail(1);
+
+//     $emails = collect([
+//         $order->client->email,
+//         $order->applicantTo->email,
+//         $order->responsible->email
+//     ])->concat(
+//             User::where('resolution_area_id', $order->resolution_area_id)->pluck('email')
+//         );
+
+//     Mail::to($emails)->queue(new OrderStartEndMail($order));
+
+// });
 
 Route::middleware(['auth', 'clientVerified'])->group(function () {
     Route::get('/dashboard', [DashBoardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
