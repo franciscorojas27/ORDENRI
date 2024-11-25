@@ -1,7 +1,7 @@
 <?php
 
 namespace Database\Factories;
-
+use App\Models\JobTitle;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +16,15 @@ class JobTitleFactory extends Factory
      */
     public function definition(): array
     {
-        return [
-            'title' => $this->faker->unique()->randomElement(['Supervisor', 'Cliente', 'Analista','Administrador']),
-        ];
+        return [];
+    }
+    public static function createOrderedJobTitles(): array
+    {
+        return array_map(fn($title) => JobTitle::create(['title' => $title]), [
+            'Cliente',
+            'Analista',
+            'Supervisor',
+            'Administrador'
+        ]);
     }
 }

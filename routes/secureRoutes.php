@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminSecureUsersController;
 
 // password.confirm
-Route::middleware(['auth', 'verified', 'adminUserVerification','password.confirm'])->group(function () {
+Route::middleware(['auth', 'verified', 'adminUserVerification','password.confirm', 'updateUserActivity'])->group(function () {
     Route::prefix('/admin-secure/users')->name('admin-secure.')->group(function () {
         Route::get('/', [AdminSecureUsersController::class, 'index'])->name('index');  // Lista de usuarios
         Route::get('/create', [AdminSecureUsersController::class, 'create'])->name('create');  // Formulario para crear usuario

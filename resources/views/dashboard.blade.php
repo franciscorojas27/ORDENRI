@@ -43,17 +43,5 @@
                 </div>
             </div>
         </div>
-        {{-- <audio id="miAudio" loop controls preload="auto">
-            <source src="{{ asset('/a.mp3') }}" type="audio/mpeg">
-        </audio>
-        <script>
-            window.onload = function() {
-                var audio = document.getElementById('miAudio');
-                audio.addEventListener('canplaythrough', function() {
-                    audio.play();
-                });
-            };
-        </script> --}}
-
     </div>
 </x-app-layout>

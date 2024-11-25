@@ -10,6 +10,7 @@ export default defineConfig({
                 'resources/js/chartDashboard.js',
                 'resources/js/coloredRows.js',
                 'resources/js/modalShow.js',
+                'resources/js/switchColor.js',
             ],
             refresh: true,
         }),

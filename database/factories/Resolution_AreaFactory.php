@@ -1,6 +1,7 @@
 <?php
 
 namespace Database\Factories;
+use App\Models\Resolution_Area;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -17,13 +18,15 @@ class Resolution_AreaFactory extends Factory
     public function definition(): array
     {
 
-        return [
-            'area' => $this->faker->unique()->randomElement([
-                'Desarrollo',
-                'Provision',
-                'SSNVL',
-                'Administración'
-            ])
-        ];
+        return [];
+    }
+    public static function createOrderedResolution_Areas(): array
+    {
+        return array_map(fn($area) => Resolution_Area::create(['area' => $area]), [
+            'Desarrollo',
+            'Provision',
+            'SSNVL',
+            'Administración'
+        ]);
     }
 }

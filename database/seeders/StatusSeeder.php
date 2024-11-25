@@ -2,10 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Status;
 use Illuminate\Database\Seeder;
 use Database\Factories\StatusFactory;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class StatusSeeder extends Seeder
 {

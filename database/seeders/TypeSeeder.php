@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Type;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Factories\TypeFactory;
 
 class TypeSeeder extends Seeder
 {
@@ -13,6 +12,6 @@ class TypeSeeder extends Seeder
      */
     public function run(): void
     {
-        Type::factory()->count(3)->create();
+        TypeFactory::createOrderedTypes();
     }
 }

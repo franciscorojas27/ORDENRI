@@ -31,8 +31,6 @@ class OrderConsultationController extends Controller
             ->orderBy('created_at', 'asc')
             ->get();
             session()->flash('message', 'Se encontraron '. $orders->count() . ' ordenes para el mes ' . $request->month . ' del año ' . $request->year . '.');
-            event(new OrderCreated($orders));
-
             $getRedirectRoute = function ($order) {
                 if (request()->routeIs('order.group.index') || request()->routeIs('order.group.show')) {
                     return route('order.group.show', $order);

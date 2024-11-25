@@ -1,7 +1,7 @@
 <?php
 
 namespace Database\Factories;
-
+use App\Models\GeneralManagements;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,20 +16,27 @@ class GeneralManagementsFactory extends Factory
      */
     public function definition(): array
     {
-        return [
-            'general_management' => $this->faker->unique()->randomElement([
-                'F/MOVILNET',
-                'F/Caveguias',
-                'F/CANTV.NET',
-                'Mercados Masivos',
-                'Operadores de Telecomunicaciones',
-                'Planificación y Finazas',
-                'Asuntos Regulatorios',
-                'Centro de Servicios',
-                'Empresas e Instituciones',
-                'Tecnología y Operaciones',
+        return [];
+    }
+    /**
+     * Crea las gerencias generales en orden específico.
+     *
+     * @return array
+     */
+    public static function createOrderedGeneralManagements(): array
+    {
+        return array_map(fn($general_management) => GeneralManagements::create(['general_management' => $general_management]), [
+            'F/MOVILNET',
+            'F/Caveguias',
+            'F/CANTV.NET',
+            'Mercados Masivos',
+            'Operadores de Telecomunicaciones',
+            'Planificación y Finazas',
+            'Asuntos Regulatorios',
+            'Centro de Servicios',
+            'Empresas e Instituciones',
+            'Tecnología y Operaciones',
 
-            ])
-        ];
+        ]);
     }
 }

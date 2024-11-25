@@ -13,17 +13,19 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @vite(['resources/css/app.css', 'resources/js/app.js','resources/js/switchColor.js'])
     </head>
 
-    <body class="font-sans antialiased">
+    <body class=" font-sans antialiased overflow-x-hidden">
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900 flex">
-
+            <!-- Sidebar -->
             <div class="fixed bg-gray-100 h-screen z-10 w-64 hidden lg:block">
                 <x-asidebar></x-asidebar>
             </div>
-            <div class="flex flex-col w-full transition-all duration-300 ml-0 lg:ml-64">
-                <div class="fixed top-0 left-0 lg:left-64 right-0 z-20">
+            <!-- Main Content -->
+            <main class="flex pt-24 flex-col w-full transition-all duration-300 ml-0 lg:ml-64 overflow-x-hidden">
+                <!-- Header -->
+                <div class="fixed top-0 left-0 right-0 lg:left-64 z-20 overflow-x-visible">
                     @include('layouts.navigation')
                     @isset($header)
                         <header class="bg-white dark:bg-gray-800 shadow">
@@ -33,15 +35,12 @@
                         </header>
                     @endisset
                 </div>
-                <main class="pt-32  flex-1">
-                    {{ $slot }}
-                </main>
-
-            </div>
+                <!-- Slot -->
+                {{ $slot }}
+                <!-- Footer -->
+                <x-footer-app></x-footer-app>
+            </main>
         </div>
-        <x-footer-app></x-footer-app>
-
-
     </body>
-
+    
 </html>

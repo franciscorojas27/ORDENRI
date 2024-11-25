@@ -152,6 +152,7 @@ class OrderController extends Controller
                 break;
         }
         $order->update($updateData);
+        
         $order->load(['client', 'applicantTo', 'responsible']);
         $emails = collect([
             $order->client?->email,

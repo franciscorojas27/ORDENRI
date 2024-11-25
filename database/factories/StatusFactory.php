@@ -23,22 +23,13 @@ class StatusFactory extends Factory
      */
     public static function createOrderedStatuses(): array
     {
-        $statuses = [
+        return array_map(fn($status) => Status::create(['status' => $status]), [
             'Pendiente',
             'En Proceso',
             'Finalizada',
             'Evaluación',
             'Rechazada',
             'Anulada',
-        ];
-
-        // Crea un array para almacenar los estados generados
-        $createdStatuses = [];
-
-        foreach ($statuses as $status) {
-            $createdStatuses[] = Status::create(['status' => $status]);
-        }
-
-        return $createdStatuses;
+        ]);
     }
 }

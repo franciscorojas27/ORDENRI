@@ -2,6 +2,7 @@
 
 use Illuminate\Foundation\Application;
 use App\Http\Middleware\ClientUserVerified;
+use App\Http\Middleware\UpdateUserActivity;
 use App\Http\Middleware\AdminUserVerification;
 use Illuminate\Validation\ValidationException;
 use App\Http\Middleware\RedirectIfOrderNotFound;
@@ -17,15 +18,11 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-            'subscribed' => ClientUserVerified::class
+            'clientVerified' => ClientUserVerified::class,
+            'adminUserVerification' => AdminUserVerification::class,
+            'order.check' => RedirectIfOrderNotFound::class,
+            'updateUserActivity' => UpdateUserActivity::class
         ]);
-        $middleware->alias([
-            'adminUserVerification' => AdminUserVerification::class
-        ]);
-        $middleware->alias([
-            'order.check' => RedirectIfOrderNotFound::class
-        ]);
-
     })
     ->withExceptions(function (Exceptions $exceptions) {
         // 

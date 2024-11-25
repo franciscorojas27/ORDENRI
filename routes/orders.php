@@ -8,7 +8,7 @@ use App\Http\Controllers\Order\OrderController;
 use App\Http\Controllers\Order\orderGroupController;
 use App\Http\Controllers\Order\OrderConsultationController;
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified','updateUserActivity'])->group(function () {
     Route::get('orders/create', [OrderController::class, 'create'])->name('order.create');
     Route::post('orders/create', [OrderController::class, 'store'])->name('order.store');
     Route::get('orders', [OrderController::class, 'index'])->name('order.index');

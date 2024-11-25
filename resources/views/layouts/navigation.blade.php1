@@ -152,3 +152,24 @@
                 </a>
             </div>
         </div>
+
+
+
+        // Route::get('/chat', function () {
+//     $order = Order::with(['client', 'applicantTo', 'responsible'])->findOrFail(1);
+
+//     $emails = collect([
+//         $order->client->email,
+//         $order->applicantTo->email,
+//         $order->responsible->email
+//     ])->concat(
+//             User::where('resolution_area_id', $order->resolution_area_id)->pluck('email')
+//         );
+
+//     Mail::to($emails)->queue(new OrderStartEndMail($order));
+
+// });
+// $users = User::whereMonth('email_verified_at', 10)
+//     ->whereYear('email_verified_at', 2024)
+//     ->whereRaw('WEEKDAY(email_verified_at) < 5')
+//     ->get();

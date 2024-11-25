@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\JobTitle;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Factories\JobTitleFactory;
 
 class JobTitleSeeder extends Seeder
 {
@@ -13,6 +12,6 @@ class JobTitleSeeder extends Seeder
      */
     public function run(): void
     {
-        JobTitle::factory(4)->create();
+        JobTitleFactory::createOrderedJobTitles();
     }
 }

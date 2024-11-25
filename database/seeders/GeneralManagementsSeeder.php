@@ -3,8 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\GeneralManagements;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Factories\GeneralManagementsFactory;
 
 class GeneralManagementsSeeder extends Seeder
 {
@@ -13,6 +12,6 @@ class GeneralManagementsSeeder extends Seeder
      */
     public function run(): void
     {
-        GeneralManagements::factory(10)->create();
+        GeneralManagementsFactory::createOrderedGeneralManagements();
     }
 }

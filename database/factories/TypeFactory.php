@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Type;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +17,19 @@ class TypeFactory extends Factory
      */
     public function definition(): array
     {
-        return [
-            'type' => $this->faker->unique()->randomElement(['Requerimiento' ,'Soporte', 'Falla' ])
-         ];
+        return [];
+    }
+    /**
+     * Crea los títulos de trabajo en orden específico.
+     *
+     * @return array
+     */
+    public static function createOrderedTypes(): array
+    {
+        return array_map(fn($title) => Type::create(['type' => $title]), [
+            'Requerimiento',
+            'Soporte',
+            'Falla',
+        ]);
     }
 }

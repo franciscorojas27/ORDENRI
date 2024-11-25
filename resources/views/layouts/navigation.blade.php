@@ -34,7 +34,6 @@
                         </x-nav-link>
                     @endcannot
                 </div> --}}
-
             </div>
 
             <!-- Settings Dropdown -->
@@ -43,7 +42,9 @@
                     <x-slot name="trigger">
                         <button
                             class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->jobTitle->title . ' | ' . Auth::user()->name . ' ' . Auth::user()->last_name }}</div>
+                            <div>
+                                {{ Auth::user()->jobTitle->title . ' | ' . Auth::user()->name . ' ' . Auth::user()->last_name }}
+                            </div>
 
                             <div class="ms-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
@@ -63,6 +64,17 @@
                         <x-dropdown-link :href="route('order.index')">
                             {{ __('Orders') }}
                         </x-dropdown-link>
+                        <x-dropdown-link>
+                        <div class="flex items-center sm:ml-auto">
+                            <!-- Switch para el menú principal -->
+                            <label for="theme-toggle-main" class="mr-2 dark:text-gray-300 text-sm">{{ __('Dark Mode') }}</label>
+                            <label class="inline-flex relative items-center cursor-pointer">
+                                <input id="theme-toggle-main" type="checkbox" class="sr-only peer" />
+                                <div class="w-14 h-8 bg-gray-300 rounded-full peer dark:bg-gray-600 peer-checked:bg-blue-600 transition-all duration-300 ease-in-out"></div>
+                                <span class="absolute left-1 top-1 w-6 h-6 bg-white rounded-full shadow-md peer-checked:translate-x-6 peer-checked:bg-white transition-all duration-300 ease-in-out"></span>
+                            </label>
+                        </div>
+                    </x-dropdown-link>
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
@@ -116,7 +128,17 @@
                 <x-responsive-nav-link :href="route('order.index')">
                     {{ __('Orders') }}
                 </x-responsive-nav-link>
-
+                <x-responsive-nav-div>
+                    <div class="flex items-center sm:ml-auto">
+                        <!-- Switch para el menú responsive -->
+                        <label for="theme-toggle-responsive" class="mr-2 dark:text-gray-300 text-sm">{{ __('Dark Mode') }}</label>
+                        <label class="inline-flex relative items-center cursor-pointer">
+                            <input id="theme-toggle-responsive" type="checkbox" class="sr-only peer" />
+                            <div class="w-14 h-8 bg-gray-300 rounded-full peer dark:bg-gray-600 peer-checked:bg-blue-600 transition-all duration-300 ease-in-out"></div>
+                            <span class="absolute left-1 top-1 w-6 h-6 bg-white rounded-full shadow-md peer-checked:translate-x-6 peer-checked:bg-white transition-all duration-300 ease-in-out"></span>
+                        </label>
+                    </div>
+                </x-responsive-nav-div>
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf

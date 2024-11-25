@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Resolution_Area;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Factories\Resolution_AreaFactory;
 
 class ResolutionAreaSeeder extends Seeder
 {
@@ -13,6 +12,6 @@ class ResolutionAreaSeeder extends Seeder
      */
     public function run(): void
     {
-        Resolution_Area::factory(4)->create();
+        Resolution_AreaFactory::createOrderedResolution_Areas();
     }
 }
