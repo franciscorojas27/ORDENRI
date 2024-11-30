@@ -21,3 +21,51 @@
         grid-area: footer;
     }
 }
+body {
+    display: none;
+}
+.theme-loaded body {
+    display: block;
+}
+/* [x-cloak] {
+    display: none !important;
+} */
+/* Contenedor con scroll, asegurándose de que tenga un z-index alto */
+/* #scrollable-container { */
+    /* position: relative; Asegura que se pueda aplicar el z-index */
+    /* z-index: 9999; Un z-index alto para que se sobreponga al contenido fijo */
+    /* overflow-y: auto; Habilitar el desplazamiento vertical */
+/* } */
+
+/* Personaliza el tamaño y la apariencia del scrollbar */
+/* #scrollable-container::-webkit-scrollbar { */
+    /* width: 12px; */
+    /* Ancho del scrollbar */
+    /* position: absolute; Asegura que el scrollbar esté posicionado en el contenedor */
+    /* top: 0; */
+    /* right: 0; */
+    /* background: transparent; Fondo transparente */
+/* } */
+
+/* Estilo de la pista del scrollbar */
+/* #scrollable-container::-webkit-scrollbar-track { */
+    /* background: #f1f1f1; /* Color de fondo de la pista */
+    /* border-radius: 10px; Bordes redondeados */ 
+/* } */
+
+/* Estilo del thumb (parte que se desplaza) */
+/* #scrollable-container::-webkit-scrollbar-thumb { */
+    /* background-color: #3498db; Color del thumb */
+    /* border-radius: 10px; Bordes redondeados */
+    /* border: 3px solid #f1f1f1; Bordes alrededor del thumb */
+/* } */
+
+/* Efecto hover sobre el thumb */
+/* #scrollable-container::-webkit-scrollbar-thumb:hover { */
+    /* background-color: #2980b9; Color cuando el mouse pasa sobre el thumb */
+/* } */
+
+/* Opcional: ocultar los botones de desplazamiento */
+/* #scrollable-container::-webkit-scrollbar-button {
+    display: none;
+} */

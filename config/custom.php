@@ -14,7 +14,8 @@ return [
 
     'login_max_attempts_before_block' => env('LOGIN_MAX_ATTEMPTS_BEFORE_BLOCK', 2),
     'login_max_attempts' => env('LOGIN_MAX_ATTEMPTS', 5),
-    'defaults_job_title' => env('DEFAULTS_JOB_TITLE', 1)
+    'defaults_job_title' => env('DEFAULTS_JOB_TITLE', 1),
+    'auth_unlock_expire' => env('AUTH_UNLOCK_EXPIRE', 60),
 
 
 ];

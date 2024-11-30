@@ -1,11 +1,11 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-CmQVpM0V.css",
+    "file": "assets/app-D9-EUH51.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-ChwDE_ET.js",
+    "file": "assets/app-BteOVBfm.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true
@@ -26,6 +26,12 @@
     "file": "assets/modalShow-kWIqjMml.js",
     "name": "modalShow",
     "src": "resources/js/modalShow.js",
+    "isEntry": true
+  },
+  "resources/js/switchColor.js": {
+    "file": "assets/switchColor-Bw8OW6dS.js",
+    "name": "switchColor",
+    "src": "resources/js/switchColor.js",
     "isEntry": true
   }
 }

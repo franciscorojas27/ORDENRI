@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Application;
 use App\Http\Middleware\ClientUserVerified;
 use App\Http\Middleware\UpdateUserActivity;
@@ -23,6 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'order.check' => RedirectIfOrderNotFound::class,
             'updateUserActivity' => UpdateUserActivity::class
         ]);
+        $middleware->redirectUsersTo('/orders');
     })
     ->withExceptions(function (Exceptions $exceptions) {
         // 

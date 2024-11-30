@@ -13,34 +13,49 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js','resources/js/switchColor.js'])
+        @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/switchColor.js'])
+
     </head>
 
-    <body class=" font-sans antialiased overflow-x-hidden">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900 flex">
+    <body class="font-sans antialiased overflow-x-hidden">
+        <div class="grid grid-cols-[auto_1fr] h-screen bg-[#F5efd7] dark:bg-gray-950" x-data="sidebarData()"
+            x-init="init" x-cloak>
+
             <!-- Sidebar -->
-            <div class="fixed bg-gray-100 h-screen z-10 w-64 hidden lg:block">
-                <x-asidebar></x-asidebar>
-            </div>
+            <aside class="h-full z-10">
+                <x-sidebar></x-sidebar>
+            </aside>
+
             <!-- Main Content -->
-            <main class="flex pt-24 flex-col w-full transition-all duration-300 ml-0 lg:ml-64 overflow-x-hidden">
-                <!-- Header -->
-                <div class="fixed top-0 left-0 right-0 lg:left-64 z-20 overflow-x-visible">
+            <main class="flex flex-col overflow-hidden">
+
+                <!-- Header (fijo en la parte superior) -->
+                <header class="fixed top-0 left-0 md:left-64 right-0 z-4 bg-white dark:bg-gray-900 shadow-sm shadow-b "                    :class="{
+                        'md:left-64': sideNav,
+                        /* Cuando sideNav está abierto */
+                        'md:left-0': !sideNav /* Cuando sideNav está oculto */
+                    }">
                     @include('layouts.navigation')
+
                     @isset($header)
-                        <header class="bg-white dark:bg-gray-800 shadow">
+                        <header class="bg-white dark:bg-gray-900 shadow sm:hidden">
                             <div class="max-w-7xl mx-auto py-2 px-4 sm:px-6 lg:px-8">
                                 {{ $header }}
                             </div>
                         </header>
                     @endisset
+                </header>
+
+                <!-- Contenedor principal con margen superior para el header fijo -->
+                <div class="flex-1 overflow-y-auto mt-16 pt-20 md:pt-2">
+                    <!-- Aquí va el contenido del slot -->
+                    {{ $slot }}
+                    <!-- Footer (en la parte inferior) -->
+                    <x-footer-app></x-footer-app>
                 </div>
-                <!-- Slot -->
-                {{ $slot }}
-                <!-- Footer -->
-                <x-footer-app></x-footer-app>
+
             </main>
+
         </div>
     </body>
-    
-</html>
+

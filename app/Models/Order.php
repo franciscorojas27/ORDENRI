@@ -15,6 +15,8 @@ class Order extends Model
         'client_id',
         'applicant_to_id',
         'responsible_id',
+        'is_deleted',
+        'delete_by_user_id',
         'resolution_area_id',
         'type_id',
         'status_id',

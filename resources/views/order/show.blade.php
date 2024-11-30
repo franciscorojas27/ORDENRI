@@ -128,10 +128,10 @@
                 <div class="flex items-center justify-between mt-4">
                     <x-link-button href="{{ $redirectRoute }}"
                         class="mr-2 {{ $order->status_id >= 3 ||
-                        (Auth::user()->jobTitle->title === 'Cliente' && !Gate::allows('isGroupMember', $order->applicantTo))
+                        !Gate::allows('isGroupMember', $order->applicantTo)
                             ? 'w-full justify-center'
                             : '' }}">
-                        {{ __('Volver') }}
+                        {{ __('Return') }}
                     </x-link-button>
                     @canany(['isAnalyzer', 'isAdmin', 'isSupervisor'], Auth::user())
                         @if ($order->status_id == 1)

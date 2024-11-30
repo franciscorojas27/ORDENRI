@@ -1,9 +1,8 @@
 <?php
 
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\PasswordController;
+use App\Http\Controllers\Auth\UnlockUserController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Auth\RegisteredUserController;
@@ -13,7 +12,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 
-Route::middleware( 'guest')->group(function () {
+Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register');
 
@@ -35,6 +34,18 @@ Route::middleware( 'guest')->group(function () {
 
     Route::post('reset-password', [NewPasswordController::class, 'store'])
         ->name('password.store');
+
+    Route::get('/send-unlock-link', [UnlockUserController::class, 'index'])
+        ->name('unlockUser.notice');
+
+    Route::post('/user/unlock/', [UnlockUserController::class, 'sendUnlockLink'])
+        ->middleware('throttle:6,1')
+        ->name('unlockUser.send');
+
+    Route::get('/user/unlock/{id}/{hash}', [UnlockUserController::class, 'unlockUser'])
+        ->middleware(['signed', 'throttle:6,1'])
+        ->name('user.verify');
+
 });
 
 Route::middleware(['auth', 'updateUserActivity'])->group(function () {
@@ -58,5 +69,5 @@ Route::middleware(['auth', 'updateUserActivity'])->group(function () {
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
-}); 
+});
 

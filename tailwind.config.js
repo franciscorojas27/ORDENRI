@@ -19,6 +19,9 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            screens: {
+                'max-860': {'max': '880px'}, // Define el breakpoint
+              },
             transitionProperty: {
                 'height': 'height',
                 'spacing': 'margin, padding',

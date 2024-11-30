@@ -1,39 +1,37 @@
-<nav x-data="{ open: false }" class="bg-white  dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+<nav x-data="{ open: false }"
+    class="bg-[#fOede7] dark:bg-gray-800 border-b border-gray-500 md:border-none dark:border-gray-700">
     <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="w-full px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
-                <div class="sm:hidden flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                <div class="flex items-center sm:block md:hidden":class="{
+                    'md:hidden sm:block': sideNav,
+                    'sm:block md:block': !sideNav
+                 }">
+                    <a href="{{ route('order.index') }}">
+                        <x-application-logo
+                            class="block  h-6 w-auto fill-current text-gray-800 dark:text-gray-200 sm:h-full " />
                     </a>
                 </div>
+                <div class="hidden
+                md:flex lg:flex lg:items-center">
+                    <button @click="toggleSideNav()"
+                        class="flex text-black dark:text-white  dark:hover:bg-gray-800 items-center rounded-full shadow-lg transform hover:scale-105 transition-transform duration-200 top-4 left-4 z-50">
+                        <svg class="w-10 justify-center  h-10 " data-slot="icon" fill="none" stroke-width="1.5"
+                            stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+                            aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
+                        </svg>
+                    </button>
+                    @isset($header)
+                        <header class="max-w-7xl py-2 px-4 sm:px-6 lg:px-8 text-sm max-860:hidden">
+                            {{ $header }}
+                        </header>
+                    @endisset
 
-                <!-- Navigation Links -->
-                {{-- <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('order.index')" :active="request()->routeIs('order.index')">
-                        {{ __('Orders') }}
-                    </x-nav-link>
-                    @cannot('isClient', Auth::user())
-                        <x-nav-link :href="route('order.group.index')" :active="request()->routeIs('order.group.index')">
-                            {{ __('Pending orders') }}
-                        </x-nav-link>
-                    @endcannot
-                    <x-nav-link :href="route('order.consultation.index')" :active="request()->routeIs('order.consultation.index')">
-                        {{ __('Service Order Consultation') }}
-                    </x-nav-link>
-                    @can('isAdmin', Auth::user())
-                        <x-nav-link :href="route('admin-secure.index')" :active="request()->routeIs('admin-secure.index')">
-                            {{ __('Admin Secure') }}
-                        </x-nav-link>
-                    @endcan
-                    @cannot('isClient', Auth::user())
-                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                            {{ __('Dashboard') }}
-                        </x-nav-link>
-                    @endcannot
-                </div> --}}
+                </div>
             </div>
 
             <!-- Settings Dropdown -->
@@ -41,7 +39,7 @@
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button
-                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
+                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-semibold rounded-md text-black dark:text-white bg-[#fOede7] dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
                             <div>
                                 {{ Auth::user()->jobTitle->title . ' | ' . Auth::user()->name . ' ' . Auth::user()->last_name }}
                             </div>
@@ -61,32 +59,18 @@
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}
                         </x-dropdown-link>
-                        <x-dropdown-link :href="route('order.index')">
-                            {{ __('Orders') }}
-                        </x-dropdown-link>
-                        <x-dropdown-link>
-                        <div class="flex items-center sm:ml-auto">
-                            <!-- Switch para el menú principal -->
-                            <label for="theme-toggle-main" class="mr-2 dark:text-gray-300 text-sm">{{ __('Dark Mode') }}</label>
-                            <label class="inline-flex relative items-center cursor-pointer">
-                                <input id="theme-toggle-main" type="checkbox" class="sr-only peer" />
-                                <div class="w-14 h-8 bg-gray-300 rounded-full peer dark:bg-gray-600 peer-checked:bg-blue-600 transition-all duration-300 ease-in-out"></div>
-                                <span class="absolute left-1 top-1 w-6 h-6 bg-white rounded-full shadow-md peer-checked:translate-x-6 peer-checked:bg-white transition-all duration-300 ease-in-out"></span>
-                            </label>
-                        </div>
-                    </x-dropdown-link>
-                        <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
 
-                            <x-dropdown-link :href="route('logout')"
-                                onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
-                            </x-dropdown-link>
-                        </form>
                     </x-slot>
                 </x-dropdown>
+
+                <form class="ml-2" method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit"
+                        class="text-white bg-red-600 hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 py-1 px-2 rounded-md text-xs font-medium">
+                        {{ __('Log Out') }}
+                    </button>
+                </form>
+
             </div>
 
             <!-- Hamburger -->
@@ -131,11 +115,15 @@
                 <x-responsive-nav-div>
                     <div class="flex items-center sm:ml-auto">
                         <!-- Switch para el menú responsive -->
-                        <label for="theme-toggle-responsive" class="mr-2 dark:text-gray-300 text-sm">{{ __('Dark Mode') }}</label>
+                        <label for="theme-toggle-responsive"
+                            class="mr-2 dark:text-gray-300 text-sm">{{ __('Dark Mode') }}</label>
                         <label class="inline-flex relative items-center cursor-pointer">
                             <input id="theme-toggle-responsive" type="checkbox" class="sr-only peer" />
-                            <div class="w-14 h-8 bg-gray-300 rounded-full peer dark:bg-gray-600 peer-checked:bg-blue-600 transition-all duration-300 ease-in-out"></div>
-                            <span class="absolute left-1 top-1 w-6 h-6 bg-white rounded-full shadow-md peer-checked:translate-x-6 peer-checked:bg-white transition-all duration-300 ease-in-out"></span>
+                            <div
+                                class="w-14 h-8 bg-gray-300 rounded-full peer dark:bg-gray-600 peer-checked:bg-blue-600 transition-all duration-300 ease-in-out">
+                            </div>
+                            <span
+                                class="absolute left-1 top-1 w-6 h-6 bg-white rounded-full shadow-md peer-checked:translate-x-6 peer-checked:bg-white transition-all duration-300 ease-in-out"></span>
                         </label>
                     </div>
                 </x-responsive-nav-div>

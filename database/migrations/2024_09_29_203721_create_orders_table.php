@@ -19,6 +19,8 @@ return new class extends Migration
             $table->foreignId('resolution_area_id')->constrained('resolution__areas');
             $table->foreignId('type_id')->constrained();
             $table->foreignId('status_id')->constrained();
+            $table->foreignId('delete_by_user_id')->nullable()->constrained('users');
+            $table->boolean('is_deleted')->default(false);
             $table->string('client_description', 500);
             $table->string('description', 500)->nullable()->default(null);
             $table->timestamp('evaluation_at')->nullable();

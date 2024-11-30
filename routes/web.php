@@ -1,4 +1,6 @@
 <?php
+use Carbon\Carbon;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
@@ -10,6 +12,7 @@ Route::middleware(['auth', 'clientVerified', 'updateUserActivity'])->group(funct
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+Route::redirect('/','login');
 
 Route::middleware('auth')->get('/api/user-id', function () {
     if (request()->ajax()) {
@@ -17,7 +20,6 @@ Route::middleware('auth')->get('/api/user-id', function () {
     }
     return redirect()->route('404');
 });
-
 Route::get('/404', function () {
     return view('error.404');
 })->middleware(['auth', 'verified'])->name('404');
