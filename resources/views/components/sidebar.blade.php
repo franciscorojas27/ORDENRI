@@ -1,5 +1,5 @@
 <aside x-show="sideNav" style=" transition: none; transform: translate-x-0; opacity: 1;"
-    class="overflow-y-auto hidden md:block bg-[#A4C7FF] dark:bg-gray-900 h-screen z-40 w-64 text-[#E8F5FF]
+    class="overflow-y-auto hidden md:block bg-[#33ccff] dark:bg-gray-900 h-screen z-40 w-64 text-[#E8F5FF]
     dark:text-white shadow-2xl drop-shadow-md">
     <!-- Sidebar Header -->
     <div
@@ -15,7 +15,7 @@
     <nav class="mt-3">
         @can('canCreateOrder', Auth::user())
             <a href="{{ route('order.create') }}"
-                class="bg-green-500 dark:bg-white hover:bg-blue-400 text-white dark:text-black m-4 font-bold py-2 px-4 rounded flex items-center">
+                class="bg-green-500 dark:bg-white hover:bg-white hover:text-black text-white dark:text-black m-4 font-bold py-2 px-4 rounded flex items-center">
                 <svg class="h-5 w-5 m-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd"
                         d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"

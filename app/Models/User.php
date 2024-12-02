@@ -4,11 +4,12 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 use App\Models\GeneralManagements;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Notifications\Notifiable;
-use \Illuminate\Database\Eloquent\Builder;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -185,7 +186,53 @@ class User extends Authenticatable
      */
     public function atValidate()
     {
-        return $this->updated_at->diffInDays(now()) >= 30;
+        // Asegúrate de convertir la fecha a un objeto Carbon
+        $expirationDate = Carbon::parse($this->password_may_expire_at);
+
+        // Verifica si la contraseña puede caducar y si la diferencia en días
+        // desde la fecha de expiración es mayor o igual a 30 días
+        return $this->password_may_expire && $expirationDate->diffInDays(now()) >= config('custom.days_before_notifying_password_expiration', 30);
+    }
+    /**
+     * Verifica si la contraseña del usuario debe ser actualizada exactamente 30 días después de la fecha de expiración
+     *
+     * Este método comprueba si la contraseña del usuario está configurada para expirar y si la fecha de expiración 
+     * es exactamente 30 días antes de la fecha actual. Si ambas condiciones se cumplen, la validación es exitosa.
+     * 
+     * @return bool Retorna `true` si la contraseña debe ser actualizada (hace exactamente 30 días), de lo contrario `false`.
+     */
+    public function atVerification()
+    {
+        return $this->password_may_expire && $this->password_may_expire_at->isSameDay(Carbon::now()->subDays(30));
+    }
+    /**
+     * Genera un nuevo token de restablecimiento de contraseña, elimina el anterior y lo almacena en la base de datos.
+     *
+     * Este método genera un token aleatorio de 60 caracteres, lo cifra utilizando el algoritmo de hash, elimina cualquier token 
+     * previo relacionado con el correo electrónico proporcionado y guarda el nuevo token en la tabla `password_reset_tokens`.
+     * Finalmente, devuelve el token en texto plano para ser enviado al usuario.
+     *
+     * @return string El token de restablecimiento de contraseña en texto plano.
+     */
+    public function generateToken()
+    {
+        // Genera un token aleatorio de 60 caracteres
+        $token = Str::random(60);
+
+        // Elimina el token anterior si existe
+        DB::table('password_reset_tokens')
+            ->where('email', $this->email)
+            ->delete();
+
+        // Inserta el nuevo token cifrado en la base de datos
+        DB::table('password_reset_tokens')->insert([
+            'email' => $this->email,
+            'token' => Hash::make($token),
+            'created_at' => Carbon::now()
+        ]);
+
+        // Devuelve el token en texto plano
+        return $token;
     }
     /**
      * Verifica si el usuario est  eliminado
@@ -229,5 +276,4 @@ class User extends Authenticatable
         $this->attributes['email'] = $value;
         $this->attributes['userid'] = $userid;
     }
-
 }

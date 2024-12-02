@@ -1,18 +1,17 @@
 <?php
-use Carbon\Carbon;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashBoardController;
 
-Route::middleware(['auth', 'clientVerified', 'updateUserActivity'])->group(function () {
+Route::middleware(['auth', 'updateUserActivity'])->group(function () {
     Route::get('/dashboard', [DashBoardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-Route::redirect('/','login');
+
+Route::redirect('/', 'login');
 
 Route::middleware('auth')->get('/api/user-id', function () {
     if (request()->ajax()) {

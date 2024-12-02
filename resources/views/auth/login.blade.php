@@ -74,7 +74,6 @@
                 </svg>
                 {{ __('Log in') }}
             </x-primary-button>
-
         </div>
 
     </form>

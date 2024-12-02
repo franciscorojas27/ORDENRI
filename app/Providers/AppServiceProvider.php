@@ -5,12 +5,15 @@ namespace App\Providers;
 use App\Models\User;
 use App\Events\OrderCreated;
 use Illuminate\Http\Request;
+use App\Rules\UniquePasswordHistory;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Listeners\SendOrderConfirmation;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\Validator;
 use App\Exceptions\CustomThrottleException;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Foundation\Exceptions\Handler;
@@ -31,7 +34,7 @@ class AppServiceProvider extends ServiceProvider
      * Bootstrap any application services.
      */
     public function boot(): void
-    {   
+    {
         RateLimiter::for('limit-login', function (Request $request) {
             return Limit::perDay(env('LOGIN_MAX_ATTEMPTS'))->by($request->user() ? $request->user()->id : $request->ip());
         });
@@ -41,13 +44,17 @@ class AppServiceProvider extends ServiceProvider
                 ->response(function (Request $request, array $headers) {
                     if ($request->user()) {
                         $request->user()->update(['last_login_at' => now()]);
-                        Cache::tags(['user-'.$request->user()->id])->flush();
+                        Cache::tags(['user-' . $request->user()->id])->flush();
                     }
                     throw ValidationException::withMessages([
                         'email' => trans('auth.throttle'),
                     ]);
                 });
         });
-        
-    }   
+        // Regla de validación para comprobar que no se use las ultimas claves puestas, esta en la carpeta Rules implementa la interfaz rule.
+        UniquePasswordHistory::registerValidationRule();
+    }
+
+
 }
+

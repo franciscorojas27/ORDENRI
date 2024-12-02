@@ -151,10 +151,9 @@ class LoginRequest extends FormRequest
         }
         if ($user?->atValidate()) {
             throw ValidationException::withMessages([
-                'userid' => 'La clave no ha sido actualizada hace más de 30 días',
+                'userid' => 'La clave no ha sido actualizada hace más de ' . config('custom.days_before_notifying_password_expiration', 30) . ' días, restablezca su contraseña para seguir.',
             ]);
         }
-        return null;
     }
 
 

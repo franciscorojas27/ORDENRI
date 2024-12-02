@@ -1,4 +1,5 @@
 {
+    "password_history": "La nueva contraseña debe ser diferente a las últimas :limit contraseñas.",
     "January": "Enero",
     "February": "Febrero",
     "March": "Marzo",

@@ -46,13 +46,5 @@ class AuthenticatedSessionController extends Controller
 
         return redirect()->route('login');
     }
-    public function disconnect_status(Request $request) {
-        if (Auth::check()) {
-            User::find(Auth::id())->update(['is_connected' => request()->is_connected]);
-        }
-        
-        // if (Auth::check()) {
-        //     User::find(Auth::id())->update(['is_connected' => false]);
-        // }
-    }
+    
 }
