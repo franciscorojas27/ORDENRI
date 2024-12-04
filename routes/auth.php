@@ -48,7 +48,7 @@ Route::middleware('guest')->group(function () {
 
 });
 
-Route::middleware(['auth', 'updateUserActivity'])->group(function () {
+Route::middleware(['auth','validatedUser', 'updateUserActivity'])->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
         ->name('verification.notice');
 

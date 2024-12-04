@@ -29,13 +29,6 @@ class Order extends Model
         'end_at',
         'closed_at',
     ];
-    public function getUserRelationsAttribute()
-    {
-        $order =  new UserRelationResource($this);
-        return $order->toArray(request());
-        
-    }
-
     public static function getSelectOptions()
     {
         return [
@@ -73,6 +66,10 @@ class Order extends Model
     public function status(): BelongsTo
     {
         return $this->belongsTo(Status::class);
+    }
+    public function files()
+    {
+        return $this->hasMany(File::class);
     }
     
 }

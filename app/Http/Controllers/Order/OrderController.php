@@ -1,19 +1,18 @@
 <?php
 
 namespace App\Http\Controllers\Order;
-
 use App\Models\Type;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Status;
 use Illuminate\Http\Request;
-use App\Mail\OrderStartEndMail;
 use App\Models\Resolution_Area;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Mail;
 use \Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\OrderStatusNotification;
 
 class OrderController extends Controller
 {
@@ -27,35 +26,22 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        // Obtener el usuario autenticado
         $user = Auth::user();
-
-        // Consulta base para obtener órdenes que no están marcadas como eliminadas
         $query = Order::with('applicantTo', 'type', 'resolutionArea', 'status')
-            ->where('is_deleted', 'false'); // Este filtro es común para todos los usuarios
+            ->where('is_deleted', 'false');
 
-        // Ajustar la consulta según el tipo de usuario
         if ($user->jobTitle->title === 'Cliente') {
-            // Para los clientes, se filtran las órdenes según su ID y área de resolución
             $query->where('client_id', $user->id);
         } elseif ($user->jobTitle->title !== 'Administrador') {
-            // Para otros roles, se filtra solo por el área de resolución
             $query->where('resolution_area_id', $user->resolution_area_id);
         }
-
-        // Aplicar los filtros adicionales basados en los parámetros de la solicitud
         $message = $this->applyFilters($request, $query);
-
-        // Verificar si la consulta no devuelve resultados y mostrar un mensaje en consecuencia
         if ($query->count() === 0) {
-            // Si no se encontraron órdenes, se muestra un mensaje personalizado
             session()->flash('message', $this->getEmptyOrdersMessage($request));
         } else {
-            // Si se encontraron resultados, se muestra el mensaje generado por los filtros
             session()->flash('message', $message);
         }
 
-        // Retornar la vista con las órdenes filtradas y otros datos necesarios
         return view('order.index', [
             'orders' => $query->orderBy('id', 'desc')->paginate(30), // Paginación de resultados
             'types' => Type::all(), // Obtener todos los tipos de órdenes
@@ -67,7 +53,6 @@ class OrderController extends Controller
 
     public function create()
     {
-
         return view('order.create', ['types' => Type::all(), 'resolution_areas' => Resolution_Area::all()]);
     }
 
@@ -80,22 +65,32 @@ class OrderController extends Controller
             'client_description' => $request->description,
             'status_id' => 1
         ]);
-        $order->load(['client', 'applicantTo', 'responsible']);
-        $emails = collect([
-            $order->client?->email,
-            $order->applicantTo?->email,
-            $order->responsible?->email,
-            'arojas@cantv.com.ve'
-        ])->filter()
-            ->concat(User::where('resolution_area_id', $order->resolution_area_id)
-                ->pluck('email'));
-        Mail::to($emails)->queue(new OrderStartEndMail($order));
+        if ($request->file('files') !== null) {
+            foreach ($request->file('files') as $file) {
+                $originalName = $file->getClientOriginalName();
+                $file->storeAs('orders', $file->hashName(), 'local');
+                $order->files()->create([
+                    'original_name' => $originalName,
+                    'file_name' => $file->hashName(),
+                    'file_path' => $file->storeAs('orders', $file->hashName(), 'local'),
+                    'mime_type' => $file->getMimeType(),
+                    'size' => $file->getSize(),
+                ]);
+            }
+        }
+
+        Notification::send(
+            User::where('resolution_area_id', $order->resolution_area_id)->get(),
+            new OrderStatusNotification($order)
+        );
+
         return redirect()->route('order.index');
     }
 
 
     public function show(Order $order)
     {
+        $order->load('files');
         $redirectRoute = $this->getRedirectRouteToIndex();
 
         return view('order.show', compact('order', 'redirectRoute'));
@@ -103,23 +98,23 @@ class OrderController extends Controller
 
 
     public function edit(Order $order)
-    {
-        return view('order.edit', ['RST' => $order::getSelectOptions(), 'order' => $order->getUserRelationsAttribute(), 'users' => User::getBasicUserInfo()]);
+    {   
+        $order->load('files');
+        // R = Resolution Area S = Status T = Type
+        return view('order.edit', ['RST' => $order::getSelectOptions(), 'order' => $order, 'users' => User::getBasicUserInfo()]);
     }
 
     public function update(UpdateOrderRequest $request, Order $order)
     {
         $order->update($request->updateFields());
-        $order->load(['client', 'applicantTo', 'responsible']);
-        $emails = collect([
-            $order->client?->email,
-            $order->applicantTo?->email,
-            $order->responsible?->email,
-            'arojas@cantv.com.ve'
-        ])->filter()
-            ->concat(User::where('resolution_area_id', $order->resolution_area_id)
-                ->pluck('email'));
-        Mail::to($emails)->queue(new OrderStartEndMail($order));
+        // $order->load(['client', 'applicantTo', 'responsible']);
+        // $emails = collect([
+        //     $order->client?->email,
+        //     $order->applicantTo?->email,
+        //     $order->responsible?->email,
+        //     'arojas@cantv.com.ve'
+        // ]);
+        // Mail::to($emails)->queue(new OrderStartEndMail($order));
         return redirect()->route('order.index');
     }
     /**
@@ -144,7 +139,6 @@ class OrderController extends Controller
             'description' => 'required|min:10|max:500',
         ]);
         $updateData = ['description' => $request->description];
-
         switch ($order->status_id) {
             case 1:
                 $updateData['status_id'] = 2;
@@ -156,18 +150,12 @@ class OrderController extends Controller
                 $updateData['end_at'] = now();
                 break;
         }
+        $a = User::find($order->applicant_to_id);
+        $b = User::find($order->responsible_id);
+        if ($a) $a->notify(new OrderStatusNotification($order));
+        if ($b) $b->notify(new OrderStatusNotification($order));
         $order->update($updateData);
 
-        $order->load(['client', 'applicantTo', 'responsible']);
-        $emails = collect([
-            $order->client?->email,
-            $order->applicantTo?->email,
-            $order->responsible?->email,
-            'arojas@cantv.com.ve'
-        ])->filter()
-            ->concat(User::where('resolution_area_id', $order->resolution_area_id)
-                ->pluck('email'));
-        Mail::to($emails)->queue(new OrderStartEndMail($order));
 
         return redirect()->route('order.index');
     }

@@ -83,6 +83,23 @@
                                     : '',
                             )" />
                     </div>
+                    <!-- Files -->
+                    <div class="overflow-y-auto max-h-40">
+                        <x-input-label for="files" :value="__('Files')" />
+                        <ul class="mt-2 dark:text-white  w-full list-disc list-inside">
+                            @forelse ($order->files as $file)
+                                <li>
+                                    <a href="{{ route('order.file.download', [$order, $file]) }}" target="_blank"
+                                        class="text-blue-500 dark:text-blue-400 hover:underline">
+                                        {{ $file->original_name }}
+                                    </a>
+                                </li>
+                            @empty
+                                <li>{{ __('No files uploaded') }}</li>
+                            @endforelse
+                        </ul>
+                        <x-input-error :messages="$errors->get('files')" class="mt-2" />
+                    </div>
                 </div>
 
                 <div>

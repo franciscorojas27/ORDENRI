@@ -11,6 +11,8 @@ export default defineConfig({
                 'resources/js/coloredRows.js',
                 'resources/js/modalShow.js',
                 'resources/js/switchColor.js',
+                'resources/js/modalDeleteOrders.js',
+                'resources/js/dropFiles.js'
             ],
             refresh: true,
         }),

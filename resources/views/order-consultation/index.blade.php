@@ -16,57 +16,33 @@
                     class="bg-mejor-color border-8 m-4 p-6 dark:bg-mejor-color-dark dark:border-gray-700 rounded-lg shadow-lg flex flex-wrap gap-6">
                     <form action="{{ route('order.consultation.index') }}" method="GET"
                         class="flex flex-wrap gap-4 w-full" id="Form-Filter">
-                        <div class="flex-1 min-w-[200px]">
-                            <x-input-label for="month"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300" :value="__('Month')" />
-                            <div class="relative">
-                                <select required id="month" name="month"
-                                    class="block w-full py-3 pl-10 pr-3 text-base text-black bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-indigo-500 dark:bg-gray-800">
-                                    <option value="" class="text-gray-500 dark:text-gray-400" disabled selected>--
-                                        {{ __('Selecciona un mes') }} --</option>
+                        <x-filter-select id="month" name="month" label="Month" :options="collect(range(1, 12))->map(function ($month) {
+                            return ['value' => $month, 'label' => __(strftime('%B', mktime(0, 0, 0, $month, 1)))];
+                        })"
+                            :selected="request('month')" placeholder="Month" />
 
-                                    @foreach (range(1, 12) as $month)
-                                        <option value="{{ $month }}">
-                                            {{ __(strftime('%B', mktime(0, 0, 0, $month, 1))) }}
-                                        </option>
-                                    @endforeach
+                        <x-filter-select id="year" name="year" label="Year" :options="collect(range(date('Y'), 2015))->map(function ($year) {
+                            return ['value' => $year, 'label' => $year];
+                        })"
+                            :selected="request('year')" placeholder="Year" />
 
+                        <x-filter-select id="applicant_to" name="applicant_to" label="Supervisor" :isRequired="false"
+                            :options="$responsible->map(function ($responsible) {
+                                return [
+                                    'value' => $responsible->id,
+                                    'label' => $responsible->name . ' ' . $responsible->last_name,
+                                ];
+                            })" :selected="request('applicant_to')" placeholder="Supervisor" />
 
-                                </select>
-                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                    <svg class="w-5 h-5 text-gray-500 dark:text-gray-400"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M4 6h16M4 12h16m-7 6h7" />
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
+                        <x-filter-select id="responsible_to" name="responsible_to" label="Responsible" :isRequired="false"
+                            :options="$supervisor->map(function ($supervisor) {
+                                return [
+                                    'value' => $supervisor->id,
+                                    'label' => $supervisor->name . ' ' . $supervisor->last_name,
+                                ];
+                            })" :selected="request('responsible_to')" placeholder="Responsible" />
 
-                        <div class="flex-1 min-w-[200px]">
-                            <x-input-label for="year"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300" :value="__('Year')" />
-                            <div class="relative">
-                                <select required id="year" name="year"
-                                    class="block w-full py-3 pl-10 pr-3 text-base text-black bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-indigo-500 dark:bg-gray-800">
-                                    <option value="" class="text-gray-500 dark:text-gray-400" disabled selected>--
-                                        {{ __('Selecciona un año') }} --</option>
-                                    @foreach (range(date('Y'), date('Y') - 5) as $year)
-                                        <option value="{{ $year }}">{{ $year }}</option>
-                                    @endforeach
-                                </select>
-                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                    <svg class="w-5 h-5 text-gray-500 dark:text-gray-400"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M4 6h16M4 12h16m-7 6h7" />
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-
+                        {{-- Button submit filter --}}
                         <div class="flex justify-end flex-none">
                             <button type="submit" aroal-label="Filter"
                                 class="p-4 text-white transition-all duration-500 ease-in-out transform hover:scale-105">
@@ -80,6 +56,7 @@
                         </div>
                     </form>
                 </div>
+                {{-- table orders consultation --}}
                 @if (isset($orders) && $orders->isNotEmpty())
                     <div class="overflow-x-auto">
                         <x-table-order :orders="$orders" :route="$getRedirectRoute">
@@ -89,5 +66,4 @@
             </div>
         </div>
     </div>
-
 </x-app-layout>

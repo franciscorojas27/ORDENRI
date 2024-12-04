@@ -10,6 +10,7 @@
             </h2>
         </div>
     </x-slot>
+    @vite(['resources/js/modalDeleteOrders.js'])
 
     <div class="pb-4 lg:pt-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -133,5 +134,6 @@
             </div>
         </div>
     </div>
+    @include('modals.modal-delete-order')
     {{ $orders->onEachSide(5)->links('pagination::tailwind') }}
 </x-app-layout>

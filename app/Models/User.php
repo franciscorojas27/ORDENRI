@@ -162,6 +162,14 @@ class User extends Authenticatable
         return $this->hasRole('Administrador');
     }
     /**
+     * Verifica si el usuario es Analista
+     *
+     * @return bool
+     */
+    public function isAnalyzer(){
+        return $this->hasRole('Analista');
+    }
+    /**
      * Verifica si el usuario es Cliente
      *
      * @return bool

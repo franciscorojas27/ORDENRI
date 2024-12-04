@@ -16,7 +16,7 @@ test('Admin can enter the create user page', function () {
         'last_name' => 'Apellido',
         'email' => 'franciscoantonior30@gmail.com',
         'password' => bcrypt('contraseña_correcta'),
-        'job_title_id' => 1, // Asegúrate de que este ID existe
+        'job_title_id' =>4, // Asegúrate de que este ID existe
         'general_management_id' => 1, // Asegúrate de que este ID existe
         'phone' => '04141234567', // O otros campos necesarios
     ]);

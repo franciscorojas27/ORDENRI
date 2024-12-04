@@ -22,14 +22,6 @@ class orderGroupController extends Controller
      */
     public function index(Request $request)
     {
-        // Definir la función de redirección en un solo lugar
-        $getRedirectRouteToShow = function ($order) {
-            if (request()->routeIs('order.group.index') || request()->routeIs('order.group.show')) {
-                return route('order.group.show', $order);
-            }
-
-            return request()->routeIs('order.consultation.index') ? route('order.consultation.show', $order) : route('order.show', $order);
-        };
 
         // Crear la consulta base
         $query = Order::with('applicantTo', 'type', 'resolutionArea', 'status')

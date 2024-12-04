@@ -12,7 +12,7 @@ use Illuminate\Validation\ValidationException;
 class UpdateOrderRequest extends FormRequest
 {
     public function authorize(): bool
-    {   
+    {
         return $this->user()->can('isAdmin', $this->user()) || $this->user()->can('isSupervisor', $this->user());
     }
 
@@ -34,18 +34,20 @@ class UpdateOrderRequest extends FormRequest
                 'required',
                 function ($attribute, $value, $fail) {
                     $this->dateValidation($attribute, $value, $fail, "No iniciado");
-                }
+                },
+                'after_or_equal:create_at'
             ],
             'end_at' => [
                 'required',
                 function ($attribute, $value, $fail) {
                     $this->dateValidation($attribute, $value, $fail, "No finalizado");
-                }
+                },
+                'after_or_equal:start_at'
             ],
             'status_id' => ['required', 'string', 'max:255'],
             'type_id' => ['required', 'string', 'max:255'],
             'resolution_area_id' => ['required', 'string', 'max:255'],
-            'responsible_id' => ['nullable','integer', 'max:255'],
+            'responsible_id' => ['nullable', 'integer', 'max:255'],
             'applicant_to_id' => ['nullable', 'integer', 'max:255'],
             'client_description' => ['required', 'string', 'max:500'],
             'description' => ['string', 'max:500'],
@@ -91,20 +93,16 @@ class UpdateOrderRequest extends FormRequest
     }
     private function dateValidation($attribute, $value, $fail, $text)
     {
-        if ($value !== $text && !$this->isValidDateFormat($value)) {
+        if ($value !== $text && !Carbon::hasFormat($value, 'Y-m-d H:i:s')) {
             $fail("La :attribute debe ser una fecha válida.");
         }
-    }
-    private function isValidDateFormat(string $date): bool
-    {
-        return Carbon::hasFormat($date, 'Y-m-d H:i:s');
     }
     public function updateFields()
     {
         if ($this->filled('status_id')) {
             $statusId = $this->input('status_id');
             if ($statusId == 1) {
-                if($this->input('applicant_to_id') !== null) { 
+                if ($this->input('applicant_to_id') !== null) {
                     $this->merge([
                         'applicant_to_id' => null,
                     ]);
@@ -142,19 +140,4 @@ class UpdateOrderRequest extends FormRequest
             ]);
         }
     }
-
-    public function passedValidation()
-    {
-        // Si 'start_at' es "No iniciado", establecemos null para evitar que pase al controlador
-        if ($this->input('start_at') === 'No iniciado') {
-            $this->request->set('start_at', null);
-        }
-
-        // Si 'end_at' es "No Finalizado", establecemos null para evitar que pase al controlador
-        if ($this->input('end_at') === 'No finalizado') {
-            $this->request->set('end_at', null);
-        }
-        $this->request->remove('client_id');
-    }
-
 }

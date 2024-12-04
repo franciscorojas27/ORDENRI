@@ -1,6 +1,11 @@
 <?php
 
 use App\Models\User;
+use Database\Seeders\JobTitleSeeder;
+use Database\Seeders\ResolutionAreaSeeder;
+use Database\Seeders\GeneralManagementsSeeder;
+
+
 
 test('login screen can be rendered', function () {
     $response = $this->get('/login');
@@ -9,18 +14,24 @@ test('login screen can be rendered', function () {
 });
 
 test('users can authenticate using the login screen', function () {
-    $user = User::factory()->create();
+    $this->seed(JobTitleSeeder::class);
+    $this->seed(ResolutionAreaSeeder::class);
+    $this->seed(GeneralManagementsSeeder::class);
+    $user = User::factory()->create([
+        'password' => bcrypt('password'),
+    ]);
 
     $response = $this->post('/login', [
-        'email' => $user->email,
+        'userid' => explode('@', $user->email)[0],
         'password' => 'password',
     ]);
 
     $this->assertAuthenticated();
-    $response->assertRedirect(route('dashboard', absolute: false));
+    $response->assertRedirect(route('order.index', absolute: false));
 });
 
 test('users can not authenticate with invalid password', function () {
+    
     $user = User::factory()->create();
 
     $this->post('/login', [
@@ -37,5 +48,5 @@ test('users can logout', function () {
     $response = $this->actingAs($user)->post('/logout');
 
     $this->assertGuest();
-    $response->assertRedirect('/');
+    $response->assertRedirect('/login');
 });

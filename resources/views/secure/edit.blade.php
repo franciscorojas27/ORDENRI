@@ -6,7 +6,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-12 bg-gray-100 dark:bg-gray-900">
+    <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-gray-50  dark:bg-gray-800 shadow-lg sm:rounded-lg p-6">
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -59,8 +59,8 @@
                         <div
                             class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 p-4 shadow-md rounded-lg">
                             <x-input-label for="userid" :value="__('User ID')" />
-                            <x-text-input  id="userid" class="block mt-2 w-full" type="text"
-                                name="userid" :value="old('userid', $user->userid)" />
+                            <x-text-input id="userid" class="block mt-2 w-full" type="text" name="userid"
+                                :value="old('userid', $user->userid)" />
                             <x-input-error :messages="$errors->get('userid')" class="mt-2" />
                         </div>
                         <!-- Phone -->
@@ -140,9 +140,11 @@
                                 class="block mt-2 w-full text-black rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                 name="can_create_orders">
                                 <option value="0"
-                                    {{ old('can_create_orders', $user->can_create_orders) == '0' ? 'selected' : '' }}>No</option>
+                                    {{ old('can_create_orders', $user->can_create_orders) == '0' ? 'selected' : '' }}>
+                                    No</option>
                                 <option value="1"
-                                    {{ old('can_create_orders', $user->can_create_orders) == '1' ? 'selected' : '' }}>Sí</option>
+                                    {{ old('can_create_orders', $user->can_create_orders) == '1' ? 'selected' : '' }}>
+                                    Sí</option>
                             </select>
                         </div>
                         <!-- Coordination/Management -->
@@ -250,4 +252,5 @@
                 </div>
             </div>
         </div>
+    </div>
 </x-app-layout>

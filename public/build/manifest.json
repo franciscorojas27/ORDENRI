@@ -1,6 +1,6 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-uZzEEZny.css",
+    "file": "assets/app-D7cLjN9A.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -20,6 +20,18 @@
     "file": "assets/coloredRows-CldKSXtV.js",
     "name": "coloredRows",
     "src": "resources/js/coloredRows.js",
+    "isEntry": true
+  },
+  "resources/js/dropFiles.js": {
+    "file": "assets/dropFiles-BV7dE6lp.js",
+    "name": "dropFiles",
+    "src": "resources/js/dropFiles.js",
+    "isEntry": true
+  },
+  "resources/js/modalDeleteOrders.js": {
+    "file": "assets/modalDeleteOrders-BncbQ4ki.js",
+    "name": "modalDeleteOrders",
+    "src": "resources/js/modalDeleteOrders.js",
     "isEntry": true
   },
   "resources/js/modalShow.js": {

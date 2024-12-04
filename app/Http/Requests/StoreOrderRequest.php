@@ -26,6 +26,8 @@ class StoreOrderRequest extends FormRequest
             'resolution_areas' => ['required', 'string', 'max:255','exists:resolution__areas,id'],
             'types' => ['required', 'string', 'max:255','exists:types,id'],
             'description' => ['required', 'string', 'max:500'],
+            'files' => ['nullable', 'array', 'max:3'],	
+            'files.*' => ['nullable', 'file', 'mimes:jpg,png,pdf,doc,docx,xls,xlsx', 'max:10240'],
         ];
     }
     public function messages(): array

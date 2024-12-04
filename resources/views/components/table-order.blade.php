@@ -9,7 +9,7 @@
             <th scope="col" class="px-6 py-3">Estado</th>
             <th scope="col" class="px-6 py-3"></th>
             @canany(['isAdmin', 'isSupervisor'], Auth::user())
-                <th scope="col" class="px-3 py-3" aria-label="Acciones"> </th>
+                <th class="px-3 py-3" scope="col" aria-label=" {{ __('Actions') }} "></th>
             @endcanany
         </tr>
     </thead>
@@ -27,25 +27,30 @@
                 <td class="px-6 py-4">
                     <a href="{{ Auth::user()->isSupervisor() || Auth::user()->isAdmin() ? route('order.edit', $order) : $route($order) }}"
                         class="text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 py-2 px-4 rounded-md">
-                        {{__('Details')}}
-                    </a>    
+                        {{ __('Details') }}
+                    </a>
                 </td>
                 @canany(['isAdmin', 'isSupervisor'], Auth::user())
                     <td class="px-3 py-4">
                         @if (request()->routeIs('order.consultation.index'))
-                            <form id="delete-order-{{ $order->id }}">
-                                <a href="{{ route('order.consultation.download', $order) }}" target="_blank"
-                                    class="text-white bg-green-500 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 py-2 px-4 rounded-md">
-                                    {{__('Print')}}
-                                </a>
-                            </form>
+                            <a class="mr-5 flex justify-center" href="{{ route('order.consultation.download', $order) }}"
+                                target="_blank">
+                                <svg data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor"
+                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="24"
+                                    height="24">
+
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3">
+                                    </path>
+                                </svg>
+                            </a>
                         @else
-                            <form id="delete-order-{{ $order->id }}" action="{{ route('order.destroy', $order) }}"
-                                method="POST">
+                            <form id="delete-order-{{ $order->id }}"
+                                action="{{ route('order.destroy', $order) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <x-danger-button
-                                    onclick="confirm('¿Seguro que deseas eliminar esta orden?') || event.stopImmediatePropagation()">
+                                <x-danger-button class="open-modal-button" data-form-id="delete-order-{{ $order->id }}"
+                                    type="button">
                                     Eliminar
                                 </x-danger-button>
                             </form>

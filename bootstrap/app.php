@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\Http\Middleware\BlockUser;
+use App\Http\Middleware\BlockAnalyzer;
 use Illuminate\Foundation\Application;
 use App\Http\Middleware\ClientUserVerified;
 use App\Http\Middleware\UpdateUserActivity;
@@ -22,7 +24,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'clientVerified' => ClientUserVerified::class,
             'adminUserVerification' => AdminUserVerification::class,
             'order.check' => RedirectIfOrderNotFound::class,
-            'updateUserActivity' => UpdateUserActivity::class
+            'updateUserActivity' => UpdateUserActivity::class,
+            'blockAnalyzer' => BlockAnalyzer::class,
+            'validatedUser' => BlockUser::class
         ]);
         $middleware->redirectUsersTo('/orders');
     })
