@@ -16,8 +16,7 @@ class BlockUser
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Permite el acceso a rutas de invitados
-        // if (!auth()->check()) {
+        // if (!Auth::check()) {
         //     return $next($request);
         // }
 

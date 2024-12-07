@@ -16,17 +16,17 @@
                     <div class="grid grid-cols-2 gap-6">
                         <!-- Order id -->
                         <div>
-                            <x-input-label for="id" class="mt-2" :value="__('N°')" />
-                            <x-text-input required readonly id="id" class="block mt-2 w-full" type="text"
-                                name="id" :value="old('id', $order->id)" />
-                            <x-input-error :messages="$errors->get('id')" class="mt-2" />
+                            <x-input-label for="client_id" class="mt-2" :value="__('N°')" />
+                            <x-text-input required readonly id="client_id" class="block mt-2 w-full" type="text"
+                                name="client_id" :value="old('client_id', $order->id)" />
+                            <x-input-error :messages="$errors->get('client_id')" class="mt-2" />
                         </div>
                         <!-- Client Values-->
                         <div>
-                            <x-input-label for="client_id" class="mt-2" :value="__('Applicant')" />
-                            <x-text-input required readonly id="client_id" class="block mt-2 w-full" type="text"
-                                name="client_id" :value="old('client', $order->client->name . ' ' . $order->client->last_name)" />
-                            <x-input-error :messages="$errors->get('client_id')" class="mt-2" />
+                            <x-input-label for="name" class="mt-2" :value="__('Applicant')" />
+                            <x-text-input required readonly id="name" class="block mt-2 w-full" type="text"
+                                name="name" :value="old('name', $order->client->name . ' ' . $order->client->last_name)" />
+                            <x-input-error :messages="$errors->get('name')" class="mt-2" />
                         </div>
 
                     </div>
@@ -59,7 +59,7 @@
                         <!-- Status order id -->
                         <div x-data="{ open: false }" class="flex items-center w-full">
                             <!-- Select -->
-                            <div class="flex flex-col {{$order->status->id == 3 ? 'w-3/4' : 'w-full'}}">
+                            <div class="flex flex-col {{ $order->status->id == 3 ? 'w-3/4' : 'w-full' }}">
                                 <x-input-label for="status_id" :value="__('Status')" class="mt-2" />
                                 <select required id="status_id" name="status_id"
                                     class="block w-full text-black rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 appearance-none">
@@ -67,10 +67,10 @@
                                         {{ is_null($order->status->id) ? 'selected' : '' }}>
                                         {{ __('Select an option') }}
                                     </option>
-                                    @foreach ($RST['status'] as $key => $status)
-                                        <option value="{{ $key }}" class="text-black"
-                                            {{ $order->status->id == $key ? 'selected' : '' }}>
-                                            {{ $status }}
+                                    @foreach ($statuses as $status)
+                                        <option value="{{ $status->id }}" class="text-black"
+                                            {{ $order->status->id == $status->id ? 'selected' : '' }}>
+                                            {{ $status->status }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -109,10 +109,10 @@
                                 <option value="" disabled selected class="text-gray-500 dark:text-gray-400"
                                     {{ is_null($order->type->id) ? 'selected' : '' }}>
                                     {{ __('Select an option') }}</option>
-                                @foreach ($RST['type'] as $key => $type)
-                                    <option value="{{ $key }}" class="text-black"
-                                        {{ $order->type->id == $key ? 'selected' : '' }}>
-                                        {{ $type }}
+                                @foreach ($types as $type)
+                                    <option value="{{ $type->id }}" class="text-black"
+                                        {{ $order->type->id == $type->id ? 'selected' : '' }}>
+                                        {{ $type->type }}
                                     </option>
                                 @endforeach
                             </select>
@@ -121,8 +121,19 @@
                         <!-- Responsible id -->
                         <div>
                             <x-input-label for="responsible_id" class="mt-2" :value="__('Supervisor')" />
-                            <x-edit-select required :id_name="'responsible_id'" :users="$users" :select="$order->responsible"
-                                :excluedtitle="'Cliente'"></x-edit-select>
+                            <select name="responsible_id" id="responsible_id"
+                                class="block mt-2 w-full text-black rounded-md shadow-sm border-gray-500 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 appearance-none">
+                                <option value="" disabled {{ is_null($order->responsible_id) ? 'selected' : '' }} class="text-gray-500">
+                                    {{ __('Select an option') }}
+                                </option>
+                                @foreach ($supervisors as $supervisor)
+                                    <option value="{{ $supervisor->id }}"
+                                        {{ $order->responsible_id == $supervisor->id ? 'selected' : '' }}
+                                        class="text-black">
+                                        {{ $supervisor->name . ' ' . $supervisor->last_name }}
+                                    </option>
+                                @endforeach
+                            </select>
                             <x-input-error :messages="$errors->get('responsible')" class="mt-2" />
                         </div>
                     </div>
@@ -136,25 +147,37 @@
                                 <option value="" disabled selected class="text-gray-500 dark:text-gray-400"
                                     {{ is_null($order->resolutionArea->id) ? 'selected' : '' }}>
                                     {{ __('Select an option') }}</option>
-                                @foreach ($RST['resolutionAreas'] as $key => $resolutionArea)
-                                    <option value="{{ $key }}" class="text-black"
-                                        {{ $order->resolutionArea->id == $key ? 'selected' : '' }}>
-                                        {{ $resolutionArea }}
+                                @foreach ($resolutionAreas as $resolutionArea)
+                                    <option value="{{ $resolutionArea->id }}" class="text-black"
+                                        {{ $order->resolutionArea->id == $resolutionArea->id ? 'selected' : '' }}>
+                                        {{ $resolutionArea->area }}
                                     </option>
                                 @endforeach
                             </select>
                             <x-input-error :messages="$errors->get('resolutionAreas')" class="mt-2" />
                         </div>
-                        <!-- ApplicantTo id-->
+                        <!-- ApplicantTo id (supervisor)-->
                         <div>
                             <x-input-label for="applicant_to_id" class="mt-2" :value="__('Applicant to')" />
-                            <x-edit-select required :id_name="'applicant_to_id'" :users="$users" :select="$order['applicantTo']"
-                                :excluedtitle="'Cliente'"> </x-edit-select>
+                            <select name="applicant_to_id" id="applicant_to_id"
+                                class="block mt-2 w-full text-black rounded-md shadow-sm border-gray-500 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 appearance-none">
+                                <option value="" disabled
+                                    {{ is_null($order->applicant_to_id) ? 'selected' : '' }} class="text-gray-500">
+                                    {{ __('Select an option') }}
+                                </option>
+                                @foreach ($applicantToList as $applicantTo)
+                                    <option value="{{ $applicantTo->id }}"
+                                        {{ $order->applicant_to_id == $applicantTo->id ? 'selected' : '' }}
+                                        class="text-black">
+                                        {{ $applicantTo->name . ' ' . $applicantTo->last_name }}
+                                    </option>
+                                @endforeach
+                            </select>
                             <x-input-error :messages="$errors->get('applicantTo')" class="mt-2" />
                         </div>
-                        <!-- Files -->
-
+                        
                     </div>
+                    <!-- Files -->
                     <div class="mt-4">
                         <x-input-label for="files" :value="__('Files')" />
                         <ul class="mt-2 dark:text-white  w-full list-disc list-inside flex flex-col items-start">

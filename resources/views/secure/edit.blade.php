@@ -121,11 +121,11 @@
                             <select name="resolution_area_id" id="resolution_area_id"
                                 class="block mt-2 w-full text-black rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                                 <option value="" disabled
-                                    {{ is_null($user->resolutionArea->id) ? 'selected' : '' }}>
+                                    {{ is_null($user->resolutionArea) || is_null($user->resolutionArea->id) ? 'selected' : '' }}>
                                     {{ __('Select an option') }}</option>
                                 @foreach ($resolutionAreas as $resolutionArea)
                                     <option value="{{ $resolutionArea->id }}"
-                                        {{ $user->resolutionArea->id == $resolutionArea->id ? 'selected' : '' }}>
+                                        {{ optional($user->resolutionArea)->id == $resolutionArea->id ? 'selected' : '' }}>
                                         {{ $resolutionArea->area }}
                                     </option>
                                 @endforeach
@@ -228,7 +228,7 @@
 
                         <form action="{{ route('admin-secure.reset', $user) }}" method="POST" class="flex-none">
                             @csrf
-                            @method('PUT')
+                            @method('PATCH')
                             <button type="submit"
                                 class="inline-flex justify-center items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200 disabled:opacity-25 transition ease-in-out duration-150">
                                 {{ __('Reset Password') }}
@@ -237,7 +237,7 @@
 
                         <form action="{{ route('admin-secure.delete', $user) }}" method="POST" class="flex-none">
                             @csrf
-                            @method('PUT')
+                            @method('DELETE')
                             <button type="submit"
                                 onclick="event.preventDefault(); if(confirm('¿Estás seguro de que deseas eliminar este usuario?')) { this.closest('form').submit(); }"
                                 class="inline-flex justify-center items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 focus:outline-none focus:border-red-700 focus:ring focus:ring-red-200 disabled:opacity-25 transition ease-in-out duration-150">

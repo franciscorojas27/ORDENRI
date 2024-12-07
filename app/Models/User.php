@@ -17,7 +17,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -89,14 +88,27 @@ class User extends Authenticatable
         );
     }
     /**
-     * Retorna los datos básicos de todos los usuarios
+     * Retorna los datos básicos de los empleados según el título de trabajo.
      *
+     * @param int $resolutionAreaId
+     * @param mixed $jobTitle (puede ser un solo título o un array de títulos)
      * @return \Illuminate\Support\Collection
      */
-    public static function getBasicUserInfo()
+    public static function getEmployeesByJobTitle($resolutionAreaId, $jobTitle)
     {
-        return self::select('id', 'name', 'job_title_id', 'last_name')->get();
+        return self::select('id', 'name', 'job_title_id', 'last_name')
+            ->where('resolution_area_id', $resolutionAreaId)
+            ->whereHas('jobTitle', function ($query) use ($jobTitle) {
+                if (is_array($jobTitle)) {
+                    $query->whereIn('title', $jobTitle);
+                } else {
+                    $query->where('title', $jobTitle);
+                }
+            })
+            ->orderBy('name')
+            ->get();
     }
+
     /**
      * Retorna el cargo del usuario
      *
@@ -166,7 +178,8 @@ class User extends Authenticatable
      *
      * @return bool
      */
-    public function isAnalyzer(){
+    public function isAnalyzer()
+    {
         return $this->hasRole('Analista');
     }
     /**
@@ -174,7 +187,7 @@ class User extends Authenticatable
      *
      * @return bool
      */
-    public function isCLient()
+    public function isCLient()   
     {
         return $this->hasRole('Cliente');
     }
@@ -284,4 +297,18 @@ class User extends Authenticatable
         $this->attributes['email'] = $value;
         $this->attributes['userid'] = $userid;
     }
+    /**
+     * Mutador para el campo resolution_area_id
+     *
+     * @param mixed $value La identificación o el objeto de la  rea de resolución
+     * @return void
+     */
+    // public function setResolutionAreaAttribute($value)
+    // {
+    //     if (request()->routeIs('index.secure')) {
+    //         $this->attributes['resolution_area_id'] = $value->id;
+    //     } else {
+    //         $this->attributes['resolution_area_id'] = $value;
+    //     }
+    // }
 }

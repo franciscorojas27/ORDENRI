@@ -57,7 +57,6 @@
                         <x-input-error :messages="$errors->get('status')" class="mt-2" />
                     </div>
                 </div>
-
                 <div class="grid grid-cols-2 gap-6">
                     <!-- type id -->
                     <div>
@@ -101,6 +100,23 @@
                         <x-input-error :messages="$errors->get('applicantTo')" class="mt-2" />
                     </div>
                 </div>
+                <!-- Files -->
+                <div class="mt-4">
+                    <x-input-label for="files" :value="__('Files')" />
+                    <ul class="mt-2 dark:text-white  w-full list-disc list-inside flex flex-col items-start">
+                        @forelse ($order->files as $file)
+                            <li class="w-full">
+                                <a href="{{ route('order.file.download', [$order, $file]) }}" target="_blank"
+                                    class="text-blue-500 dark:text-blue-400 hover:underline w-1/2">
+                                    {{ $file->original_name }}
+                                </a>
+                            </li>
+                        @empty
+                            <li class="w-full">{{ __('No files uploaded') }}</li>
+                        @endforelse
+                    </ul>
+                    <x-input-error :messages="$errors->get('files')" class="mt-2" />
+                </div>
                 <!-- Client Description -->
                 <div>
                     <x-input-label for="client_description" class="mt-2" :value="__('Client description')" class="mt-4" />
@@ -117,8 +133,8 @@
                     <x-input-label for="description" class="mt-2" :value="__('Activity')" />
 
                     @if (Auth::user()->isClient())
-                        <x-textarea required readonly id="description" name="description" rows="4" cols="65"
-                            style="resize: none;" class="mt-2 block w-full">
+                        <x-textarea required readonly id="description" name="description" rows="4"
+                            cols="65" style="resize: none;" class="mt-2 block w-full">
                             {{ old('description', $order->description) }}
                         </x-textarea>
                     @else
@@ -130,23 +146,18 @@
 
 
                     <x-input-error :messages="$errors->get('description')" class="mt-2" />
-
                 </form>
                 <div class="flex items-center justify-between mt-4">
                     <x-link-button href="{{ $redirectRoute }}"
-                        class="mr-2 justify-center
-                        {{ ($order->status_id <= 2  && ($order->applicant_to_id == Auth::id() || Gate::allows('isGroupMember', Auth::user(), $order->applicantTo)))
-                            ? ' w-25'
-                            : ' w-full' }}">
+                        class="mr-2 justify-center {{$order->getButtonWidthClass()}}">
                         {{ __('Return') }}
                     </x-link-button>
                     @canany(['isAnalyzer', 'isAdmin', 'isSupervisor'], Auth::user())
-                        @if ($order->status_id == 1)
+                        @if ($order->acceptOrder())
                             <x-primary-button type="submit" form="form-description" class="w-full justify-center">
                                 {{ __('Accept order') }}
                             </x-primary-button>
-                        @elseif (
-                            $order->status_id == 2 && ($order->applicant_to_id == Auth::id() || Gate::allows('isGroupMember', Auth::user(), $order->applicantTo->id)))
+                        @elseif ($order->finishOrder())
                             <x-primary-button type="submit" id="finishButton" form="form-description"
                                 class="w-full justify-center">
                                 {{ __('Finish order') }}

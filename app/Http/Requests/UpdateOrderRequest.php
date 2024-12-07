@@ -28,21 +28,19 @@ class UpdateOrderRequest extends FormRequest
     {
         $this->fields = [
             'client_id' => ['required', 'string', 'max:255'],
-            'id' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
             'created_at' => ['required', 'date_format:Y-m-d H:i:s'],
             'start_at' => [
-                'required',
-                function ($attribute, $value, $fail) {
-                    $this->dateValidation($attribute, $value, $fail, "No iniciado");
-                },
-                'after_or_equal:create_at'
+                'exclude_if:start_at,' . config('validation.text_for_start_at_edit'),
+                'date_format:Y-m-d H:i:s',
+                'after:created_at',
+                'after_or_equal:start_at',
             ],
             'end_at' => [
-                'required',
-                function ($attribute, $value, $fail) {
-                    $this->dateValidation($attribute, $value, $fail, "No finalizado");
-                },
-                'after_or_equal:start_at'
+                'exclude_if:end_at,' . config('validation.text_for_end_at_edit'),
+                'date_format:Y-m-d H:i:s',
+                'after:created_at',
+                'after_or_equal:start_at',
             ],
             'status_id' => ['required', 'string', 'max:255'],
             'type_id' => ['required', 'string', 'max:255'],
@@ -77,8 +75,8 @@ class UpdateOrderRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'client_id' => 'solicitante',
-            'id' => 'Número de orden',
+            'client_id' => 'Número de orden',
+            'name' => 'solicitante',
             'created_at' => 'fecha de creación',
             'start_at' => 'fecha de inicio',
             'end_at' => 'fecha de finalización',
@@ -91,23 +89,24 @@ class UpdateOrderRequest extends FormRequest
             'description' => 'actividad',
         ];
     }
-    private function dateValidation($attribute, $value, $fail, $text)
-    {
-        if ($value !== $text && !Carbon::hasFormat($value, 'Y-m-d H:i:s')) {
-            $fail("La :attribute debe ser una fecha válida.");
-        }
-    }
+    /**
+     * Actualiza los campos start_at y end_at dependiendo del estatus actual.
+     * Si el estatus es 1, se eliminan start_at y end_at.
+     * Si el estatus es 2, se establece start_at en la fecha actual y se elimina end_at.
+     * Si el estatus es 3, se establece end_at en la fecha actual.
+     * Si el estatus es 5, 6, 7 o 8, se establece end_at en la fecha actual y si start_at es nulo, se establece en la fecha actual.
+     * Luego, si el usuario tiene permisos de administrador o supervisor, se devuelve el array de campos solicitados, de lo contrario, se lanza una excepción de validación.
+     * @return array<string, mixed>
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function updateFields()
     {
         if ($this->filled('status_id')) {
             $statusId = $this->input('status_id');
             if ($statusId == 1) {
-                if ($this->input('applicant_to_id') !== null) {
-                    $this->merge([
-                        'applicant_to_id' => null,
-                    ]);
-                }
                 $this->merge([
+                    'responsible_id' => null,
+                    'applicant_to_id' => null,
                     'start_at' => null,
                     'end_at' => null
                 ]);
@@ -118,6 +117,7 @@ class UpdateOrderRequest extends FormRequest
                 ]);
             } elseif ($statusId == 3) {
                 $this->merge([
+                    'start_at' => $this->input('start_at') == config('validation.text_for_start_at_edit') ? now() : $this->input('start_at'),
                     'end_at' => now(),
                 ]);
             } elseif (in_array($statusId, [5, 6, 7, 8])) {
@@ -131,7 +131,6 @@ class UpdateOrderRequest extends FormRequest
             }
         }
 
-
         if ($this->user()->can('isAdmin', $this->user()) || $this->user()->can('isSupervisor', $this->user())) {
             return $this->all();
         } else {
@@ -140,4 +139,5 @@ class UpdateOrderRequest extends FormRequest
             ]);
         }
     }
+
 }

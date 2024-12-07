@@ -9,5 +9,5 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote')->hourly();
 
 Schedule::command('check:check-user-activity')->everyMinute();
-Schedule::command('app:check-password-expiration-date')->everyFiveSeconds();
+Schedule::command('app:check-password-expiration-date')->daily();
 

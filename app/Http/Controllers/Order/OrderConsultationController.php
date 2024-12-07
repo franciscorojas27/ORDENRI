@@ -27,7 +27,6 @@ class OrderConsultationController extends Controller
      */
     public function index(Request $request)
     {
-        // Obtención de usuarios según el título del trabajo.
         $supervisor = User::whereHas('jobTitle', fn($query) => $query->whereIn('title', ['Supervisor']))->get();
         $responsible = User::whereHas('jobTitle', fn($query) => $query->whereIn('title', ['Analista', 'Supervisor']))->get();
 
@@ -85,10 +84,7 @@ class OrderConsultationController extends Controller
      */
     public function download(Order $order)
     {
-        // Carga la vista 'pdf.order-consultation' y genera un PDF con los datos de la orden.
         $pdf = Pdf::loadView('pdf.order-consultation', compact('order'));
-
-        // Descarga el archivo PDF con un nombre dinámico basado en el ID de la orden.
         return $pdf->download("Orden de Servicio n° {$order->id}.pdf");
     }
 

@@ -35,7 +35,7 @@ class PasswordExpirationNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject('Tu contraseña será bloqueada en 30 días')
-            ->greeting('Hola, ' . $this->user->name)
+            ->greeting('Buen dia, ' . $this->user->name)
             ->line('¡Atención! Tu contraseña será bloqueada en los próximos 30 días. Para evitar interrupciones en tu acceso, te recomendamos actualizarla lo antes posible.')
 
             ->action('Actualizar Contraseña', url('/reset-password/' . $this->user->generateToken() . '?email=' . urlencode($this->user->email)))

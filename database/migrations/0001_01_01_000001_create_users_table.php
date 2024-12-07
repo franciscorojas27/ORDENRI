@@ -22,7 +22,7 @@ return new class extends Migration {
             $table->foreignId('general_management_id')->constrained();
             $table->string('password');
             $table->boolean('group')->default(false);
-            $table->foreignId('resolution_area_id')->constrained('resolution__areas');
+            $table->foreignId('resolution_area_id')->nullable()->constrained('resolution__areas');
             $table->string('coordination_management');
             $table->boolean('password_may_expire')->default(false);
             $table->boolean('is_blocked')->default(false);

@@ -1,14 +1,16 @@
 <?php
 
 namespace App\Http\Controllers\Order;
+
 use App\Models\Type;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Status;
 use Illuminate\Http\Request;
 use App\Models\Resolution_Area;
+use App\Events\OrderStatusUpdated;
 use App\Http\Controllers\Controller;
-use \Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
 use Illuminate\Support\Facades\Notification;
@@ -22,32 +24,37 @@ class OrderController extends Controller
      * la consulta se ajusta para mostrar las órdenes correspondientes.
      * 
      * @param Request $request La solicitud HTTP que contiene los filtros de búsqueda.
+     * @var \App\Models\User $user El usuario autenticado.
      * @return \Illuminate\View\View La vista que muestra las órdenes filtradas.
      */
     public function index(Request $request)
     {
-        $user = Auth::user();
+        $user = User::find(Auth::id());
         $query = Order::with('applicantTo', 'type', 'resolutionArea', 'status')
             ->where('is_deleted', 'false');
 
-        if ($user->jobTitle->title === 'Cliente') {
-            $query->where('client_id', $user->id);
-        } elseif ($user->jobTitle->title !== 'Administrador') {
+        if ($user->isClient()) {
+            $query = Auth::user()->group
+                ? $query->whereHas('client', function ($query) {
+                    $query->where('coordination_management', Auth::user()->coordination_management);
+                })
+                : $query->where('client_id', Auth::id());
+        } elseif ($user->isAdmin()) {
             $query->where('resolution_area_id', $user->resolution_area_id);
         }
+
         $message = $this->applyFilters($request, $query);
-        if ($query->count() === 0) {
+        if ($query->count() == 0) {
             session()->flash('message', $this->getEmptyOrdersMessage($request));
         } else {
             session()->flash('message', $message);
         }
-
         return view('order.index', [
-            'orders' => $query->orderBy('id', 'desc')->paginate(30), // Paginación de resultados
-            'types' => Type::all(), // Obtener todos los tipos de órdenes
-            'resolution_areas' => Resolution_Area::all(), // Obtener todas las áreas de resolución
-            'statuses' => Status::all(), // Obtener todos los estados de las órdenes
-            'getRedirectRoute' => fn($order) => $this->getRedirectRouteToShow($order), // Función para redirigir a la vista de detalle de la orden
+            'orders' => $query->orderBy('id', 'desc')->paginate(30),
+            'types' => Type::all(),
+            'resolution_areas' => Resolution_Area::all(),
+            'statuses' => Status::all(),
+            'getRedirectRoute' => fn($order) => $this->getRedirectRouteToShow($order),
         ]);
     }
 
@@ -65,7 +72,7 @@ class OrderController extends Controller
             'client_description' => $request->description,
             'status_id' => 1
         ]);
-        if ($request->file('files') !== null) {
+        if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {
                 $originalName = $file->getClientOriginalName();
                 $file->storeAs('orders', $file->hashName(), 'local');
@@ -90,32 +97,37 @@ class OrderController extends Controller
 
     public function show(Order $order)
     {
-        $order->load('files');
-        $redirectRoute = $this->getRedirectRouteToIndex();
-
-        return view('order.show', compact('order', 'redirectRoute'));
+        return view('order.show', [
+            'order' => $order->load('files'),
+            'redirectRoute' => $this->getRedirectRouteToIndex(),
+        ]);
     }
 
-
+    /**
+     * Muestra el formulario de edición para una orden específica.
+     * Carga los archivos asociados a la orden y pasa los datos necesarios a la vista.
+     *
+     * @param Order $order La orden que se va a editar.
+     * @return \Illuminate\View\View La vista del formulario de edición de la orden.
+     */
     public function edit(Order $order)
-    {   
+    {
         $order->load('files');
-        // R = Resolution Area S = Status T = Type
-        return view('order.edit', ['RST' => $order::getSelectOptions(), 'order' => $order, 'users' => User::getBasicUserInfo()]);
+        return view('order.edit', [
+            'statuses' => Status::all(),
+            'types' => Type::all(),
+            'resolutionAreas' => Resolution_Area::all(),
+            'order' => $order,
+            'supervisors' => User::getEmployeesByJobTitle($order->resolution_area_id, 'Supervisor'),
+            'applicantToList' => User::getEmployeesByJobTitle($order->resolution_area_id, ['Supervisor', 'Analista'])
+        ]);
     }
 
     public function update(UpdateOrderRequest $request, Order $order)
     {
+        event(new OrderStatusUpdated($order));
         $order->update($request->updateFields());
-        // $order->load(['client', 'applicantTo', 'responsible']);
-        // $emails = collect([
-        //     $order->client?->email,
-        //     $order->applicantTo?->email,
-        //     $order->responsible?->email,
-        //     'arojas@cantv.com.ve'
-        // ]);
-        // Mail::to($emails)->queue(new OrderStartEndMail($order));
-        return redirect()->route('order.index');
+        return redirect()->route('order.edit', $order);
     }
     /**
      * Elimina una orden especifica de la base de datos.
@@ -150,15 +162,11 @@ class OrderController extends Controller
                 $updateData['end_at'] = now();
                 break;
         }
-        $a = User::find($order->applicant_to_id);
-        $b = User::find($order->responsible_id);
-        if ($a) $a->notify(new OrderStatusNotification($order));
-        if ($b) $b->notify(new OrderStatusNotification($order));
+        event(new OrderStatusUpdated($order));
         $order->update($updateData);
-
-
         return redirect()->route('order.index');
     }
+
     public function getRedirectRouteToIndex()
     {
         if (request()->routeIs('order.consultation.show')) {

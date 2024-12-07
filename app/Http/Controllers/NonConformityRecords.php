@@ -23,11 +23,11 @@ class NonConformityRecords extends Controller
         );
         $order->update(
             [
-                'status' => 2,
+                'status_id' => 2,
                 'start_at' => now(),
                 'end_at' => null,
             ]
         );
-        return route('order.edit',$order);
+        return redirect()->route('order.edit',$order);
     }
 }

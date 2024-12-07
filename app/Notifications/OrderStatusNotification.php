@@ -27,7 +27,6 @@ class OrderStatusNotification extends Notification implements ShouldQueue
     {
         $status = $this->order->status->status;
         $isSupervisor = $notifiable->isSupervisor() || $notifiable->isAdmin();
-
         $actionRoute = $isSupervisor
             ? route('order.edit', $this->order)
             : route('order.show', $this->order);

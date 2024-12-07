@@ -23,24 +23,18 @@ class orderGroupController extends Controller
     public function index(Request $request)
     {
 
-        // Crear la consulta base
         $query = Order::with('applicantTo', 'type', 'resolutionArea', 'status')
-            ->where('status_id', 2); // Filtrar por estado de la orden
+            ->where('status_id', 2);
 
-        // Aplicar filtro adicional si el usuario pertenece a un grupo
         if (Auth::user()->group) {
             $query->whereHas('applicantTo', function ($query) {
                 $query->where('coordination_management', Auth::user()->coordination_management);
             });
         } else {
-            // Si el usuario no pertenece a un grupo, filtrar por su propio ID
             $query->where('applicant_to_id', Auth::id());
         }
-
-        // Realizar la consulta y paginar los resultados
         $orders = $query->orderBy('id', 'asc')->paginate(10);
 
-        // Retornar la vista con los datos
         return view('order.index', [
             'orders' => $orders,
             'types' => Type::all(),

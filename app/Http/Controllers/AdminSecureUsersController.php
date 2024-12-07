@@ -14,12 +14,17 @@ use App\Http\Requests\UpdateControlUserRequest;
 
 /**
  * @OA\Info(
- *     title="API de Ejemplo",
+ *     title="API de Autenticacion de Usuarios",
  *     version="1.0.0",
- *     description="Esta es una API de prueba para demostrar L5-Swagger en Laravel.",
+ *     description="Esta es una API para autenticar a los usuarios en el sistema.",
  *     @OA\Contact(
- *         name="Tu Nombre",
- *         email="tuemail@example.com"
+ *         name="Ing. Luis A. Albornoz C.",
+ *         email="luis.albornoz@cantv.com.ve",
+ *         url="https://github.com/luisalbornoz"
+ *     ),
+ *     @OA\License(
+ *         name="GNU General Public License v2.0",
+ *         url="https://opensource.org/licenses/GPL-2.0"
  *     )
  * )
  */
@@ -41,8 +46,6 @@ class AdminSecureUsersController extends Controller
  */
     public function index(Request $request)
     {
-
-
         if ($request->search) {
             $users = User::with('jobTitle', 'generalManagement')
                 ->where('name', 'LIKE', "%{$request->search}%")
@@ -63,9 +66,8 @@ class AdminSecureUsersController extends Controller
     {
         return view('secure.create', ['job_titles' => JobTitle::all(), 'resolution_areas' => Resolution_Area::all(), 'general_managements' => GeneralManagements::all()]);
     }
-    public function edit(Request $request)
+    public function edit(User $user)
     {
-        $user = User::findOrFail($request->id);
         return view('secure.edit', ['user' => $user, 'jobTitles' => JobTitle::all(), 'generalManagements' => GeneralManagements::all(), 'resolutionAreas' => Resolution_Area::all()]);
     }
     public function update(User $user, UpdateControlUserRequest $request)
@@ -78,7 +80,7 @@ class AdminSecureUsersController extends Controller
         $user = User::create([
             'name' => $request->name,
             'last_name' => $request->last_name,
-            'job_title_id' => $request->job_title,
+            'job_title_id' => $request->job_title ?? config('custom.defaults_job_title', 1),
             'resolution_area_id' => $request->resolution_area,
             'phone' => $request->phone,
             'ip_address' => $request->ip(),
@@ -99,7 +101,7 @@ class AdminSecureUsersController extends Controller
     }
     public function resetPassword(User $user)
     {
-        $user->update(['password' => Hash::make('cantv1234')]);
+        $user->update(['password' => Hash::make(config('auth.defaults.passwords','cantv1234'))]);
         return back();
     }
 

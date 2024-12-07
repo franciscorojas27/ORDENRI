@@ -43,6 +43,8 @@ return [
     |
     */
     'defaults_job_title' => env('DEFAULTS_JOB_TITLE', 1),
+    'defaults_resolution_area' => env('DEFAULTS_RESOLUTION_AREA', 1),
+
     /*
     |--------------------------------------------------------------------------
     | Tiempo de espera para desbloquear la cuenta

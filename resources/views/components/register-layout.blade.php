@@ -1,4 +1,4 @@
-@props(['register' => true,'job_titles', 'resolution_areas', 'general_managements'])
+@props(['register' => true, 'job_titles', 'resolution_areas', 'general_managements'])
 @if ($register)
     <form method="POST" action="{{ route('register') }}" class="w-full max-w-md">
     @else
@@ -40,23 +40,23 @@
         <x-input-error :messages="$errors->get('job_titles')" class="mt-2 text-red-600" />
     </div>
 @endif
-
-<!-- Resolution area -->
-<div>
-    <x-input-label for="resolution_area" :value="__('Resolution area')" class="text-black mt-2" />
-    <select id="resolution_area" name="resolution_area"
-        class="block w-full mt-1 bg-white border-gray-300 focus:border-indigo-500 focus:ring rounded-md focus:ring-indigo-200 focus:ring-opacity-50"
-        required>
-        <option value="">-- Seleccione area resulotoria --</option>
-        @foreach ($resolution_areas as $resolution_area)
-            <option value="{{ $resolution_area->id }}"
-                {{ old('resolution_area') == $resolution_area->id ? 'selected' : '' }}>{{ $resolution_area->area }}
-            </option>
-        @endforeach
-    </select>
-    <x-input-error :messages="$errors->get('resolution_areas')" class="mt-2 text-red-600" />
-</div>
-
+@if (request()->routeIs('admin-secure.create'))
+    <!-- Resolution area -->
+    <div>
+        <x-input-label for="resolution_area" :value="__('Resolution area')" class="text-black mt-2" />
+        <select id="resolution_area" name="resolution_area"
+            class="block w-full mt-1 bg-white border-gray-300 focus:border-indigo-500 focus:ring rounded-md focus:ring-indigo-200 focus:ring-opacity-50"
+            required>
+            <option value="">-- Seleccione area resolutoria --</option>
+            @foreach ($resolution_areas as $resolution_area)
+                <option value="{{ $resolution_area->id }}"
+                    {{ old('resolution_area') == $resolution_area->id ? 'selected' : '' }}>{{ $resolution_area->area }}
+                </option>
+            @endforeach
+        </select>
+        <x-input-error :messages="$errors->get('resolution_areas')" class="mt-2 text-red-600" />
+    </div>
+@endif
 <!-- Coordination/Management -->
 <div>
     <x-input-label for="coordination_management" :value="__('Coordination/Management')" class="text-black mt-2" />
@@ -143,4 +143,3 @@
     </button>
 </div>
 </form>
-
