@@ -9,6 +9,16 @@ use Illuminate\Support\Facades\Auth;
 
 class NonConformityRecords extends Controller
 {
+    /**
+     * Almacena un registro de no conformidad y actualiza el estado de la orden.
+     *
+     * Luego de almacenar el registro de no conformidad, se actualiza el estado de la orden
+     * a En curso y se establece la fecha de inicio y finalización.
+     * Finalmente se redirige al usuario a la vista de edición de la orden.
+     *
+     * @param  \App\Models\Order  $order La orden que se va a actualizar.
+     * @return \Illuminate\Http\Response La respuesta HTTP con la redirección a la vista de edición de la orden.
+     */
     public function store(Order $order)
     {
         NonConformityRecord::create(

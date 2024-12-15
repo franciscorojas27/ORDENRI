@@ -4,6 +4,7 @@
     'name' => '',
     'label' => '',
     'options' => [],
+    'colorBackGround' => 'bg-gray-800',
     'selected' => null,
     'placeholder' => '-- Select --',
     'isRequired' => true,
@@ -13,7 +14,7 @@
     <x-input-label for="{{ $id }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300" :value="__($label)" />
     <div class="relative">
         <select {{ $isRequired ? 'required' : '' }} id="{{ $id }}" name="{{ $name }}"
-            class="block w-full py-3 pl-10 pr-3 text-base text-black bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-indigo-500 dark:bg-gray-800">
+            class="block w-full py-3 pl-10 pr-3 text-base text-gray-900 bg-white dark:text-white  border-0 border-b-2 border-gray-300 dark:border-gray-700 appearance-none focus:outline-none focus:ring-0 focus:border-indigo-500 dark:{{$colorBackGround}}">
             <option value="" class="text-gray-500 dark:text-gray-400" disabled {{ $selected ? '' : 'selected' }}>
                 -- {{ __($placeholder) }} --
             </option>

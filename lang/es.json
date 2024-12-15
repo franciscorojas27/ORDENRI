@@ -1,4 +1,11 @@
 {
+    "Select the range of days:" : "Selecciona el rango de días:",
+    "Orders of Service - Metrics": "Ordenes de servicio - Métricas",
+    "Orders of Service - Count": "Ordenes de servicio - Conteo",
+    "Orders finished in the month": "Ordenes finalizadas en el mes",
+    "Created orders in the month": "Ordenes creadas en el mes",
+    "Percentage of fulfillment of indicators": "Porcentaje de cumplimiento de indicadores",
+    "Connected": "Conectado",
     "password_history": "La nueva contraseña debe ser diferente a las últimas :limit contraseñas.",
     "January": "Enero",
     "February": "Febrero",

@@ -10,15 +10,18 @@ use Symfony\Component\HttpFoundation\Response;
 class ClientUserVerified
 {
     /**
-     * Handle an incoming request.
+     * Verifica si el usuario logueado es un cliente y redirige a la pagina de ordenes en caso de serlo.
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {   
-        if ($request->user()->Jobtitle->title === 'Cliente') {
-            return redirect()->route('order.index');
+        // if ($request->user()->Jobtitle->title === 'Cliente') {
+        //     return redirect()->route('order.index');
+        // }
+        if(!$request->user()->isClient()) {
+            return $next($request);
         }
-        return $next($request);
+        return redirect()->route('order.index');
     }
 }

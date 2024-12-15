@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 class BlockAnalyzer
 {
     /**
-     * Handle an incoming request.
+     * Maneja una solicitud entrante para denegar el acceso a los usuarios con rol de analista.
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */

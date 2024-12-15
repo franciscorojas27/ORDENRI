@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -17,22 +18,96 @@ class OrderFactory extends Factory
      */
     public function definition(): array
     {
-        $count = User::count();
         return [
-            'client_id' => $this->faker->numberBetween(1, $count),
-            'applicant_to_id' => $this->faker->numberBetween(1, $count),
-            'responsible_id' => $this->faker->numberBetween(1, $count),
             'resolution_area_id' => $this->faker->numberBetween(1, 4),
             'type_id' => $this->faker->numberBetween(1, 3),
-            'status_id' => $this->faker->numberBetween(1, 6),
             'client_description' => $this->faker->text(400),
-            'description' => $this->faker->text(400),
-            'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
-            'updated_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
-            'evaluation_at' => $this->faker->optional()->dateTimeBetween('-1 year', 'now'),
-            'start_at' => $this->faker->optional()->dateTimeBetween('-1 year', 'now'),
-            'end_at' => $this->faker->optional()->dateTimeBetween('-1 year', 'now'),
-            'closed_at' => $this->faker->optional()->dateTimeBetween('-1 year', 'now'),
+            'description' => $this->faker->randomElement([null, $this->faker->text(400)]),
         ];
+    }
+
+    public function orderStatusPending()
+    {
+        return $this->state(fn($attributes) => [
+            // Fecha de creación dentro del último año
+            'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
+            'status_id' => 1, // Estatus pendiente
+            'client_id' => $this->getRandomClientId($attributes['resolution_area_id']),
+        ]);
+    }
+
+    public function orderStatusStarted()
+    {
+        // Generar una fecha de creación para la orden
+        $createdAt = $this->faker->dateTimeBetween('-1 year', 'now');
+        // Generar una fecha de inicio posterior a la fecha de creación
+        $startAt = $this->faker->dateTimeBetween($createdAt, 'now');
+
+        return $this->state(fn($attributes) => [
+            'status_id' => 2, // Estatus iniciado
+            'created_at' => $createdAt,
+            'start_at' => $startAt,
+            'client_id' => $this->getRandomClientId($attributes['resolution_area_id']),
+            'applicant_to_id' => $this->getRandomApplicantId($attributes['resolution_area_id']),
+        ]);
+    }
+
+    public function orderStatusEnd()
+    {
+        return $this->state(function ($attributes) {
+            $createdAt = $this->faker->dateTimeBetween('2024-12-01 00:00:00', '2024-12-28 23:59:59');
+
+            $startAt = clone $createdAt;
+            $startAt->modify('+5 hours');
+
+            $hours = $this->faker->numberBetween(16, 18);
+            $endAt = clone $startAt;
+            $endAt->modify("+$hours hours");
+
+            if ($endAt <= $startAt) {
+                $endAt->modify('+1 hour');
+            }
+            return [
+                'status_id' => $this->faker->numberBetween(1,3),
+                'created_at' => $createdAt,
+                'start_at' => $startAt,
+                'end_at' => $endAt,
+                'client_id' => $this->getRandomClientId($attributes['resolution_area_id']),
+                'applicant_to_id' => $this->getRandomApplicantId($attributes['resolution_area_id']),
+                'responsible_id' => $this->getRandomResponsibleId($attributes['resolution_area_id']),
+            ];
+        });
+    }
+
+
+    /**
+     * Get a random client ID based on the resolution area.
+     */
+    private function getRandomClientId(int $resolutionAreaId): int
+    {
+        $users = [
+            1 => User::where('resolution_area_id', 1)->pluck('id')->toArray(),
+            2 => User::where('resolution_area_id', 2)->pluck('id')->toArray(),
+            3 => User::where('resolution_area_id', 3)->pluck('id')->toArray(),
+            4 => User::where('resolution_area_id', 4)->pluck('id')->toArray(),
+        ];
+
+        return $users[$resolutionAreaId][array_rand($users[$resolutionAreaId])];
+    }
+
+    /**
+     * Get a random applicant ID based on the resolution area.
+     */
+    private function getRandomApplicantId(int $resolutionAreaId): int
+    {
+        return $this->getRandomClientId($resolutionAreaId);
+    }
+
+    /**
+     * Get a random responsible ID based on the resolution area.
+     */
+    private function getRandomResponsibleId(int $resolutionAreaId): int
+    {
+        return $this->getRandomClientId($resolutionAreaId);
     }
 }

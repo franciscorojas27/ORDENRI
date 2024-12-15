@@ -3,6 +3,7 @@
 use App\Http\Middleware\BlockUser;
 use App\Http\Middleware\BlockAnalyzer;
 use Illuminate\Foundation\Application;
+use App\Http\Middleware\CanCreateOrder;
 use App\Http\Middleware\ClientUserVerified;
 use App\Http\Middleware\UpdateUserActivity;
 use App\Http\Middleware\AdminUserVerification;
@@ -23,7 +24,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'order.check' => RedirectIfOrderNotFound::class,
             'updateUserActivity' => UpdateUserActivity::class,
             'blockAnalyzer' => BlockAnalyzer::class,
-            'userValidated' => BlockUser::class
+            'userValidated' => BlockUser::class,
+            'canCreateOrder' => CanCreateOrder::class,
         ]);
         $middleware->redirectUsersTo('/orders');
     })

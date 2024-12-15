@@ -11,8 +11,12 @@ use App\Http\Requests\ProfileUpdateRequest;
 
 class ProfileController extends Controller
 {
+    
     /**
-     * Display the user's profile form.
+     * Display the user's profile edit form.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View
      */
     public function edit(Request $request): View
     {

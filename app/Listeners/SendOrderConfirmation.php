@@ -2,14 +2,9 @@
 
 namespace App\Listeners;
 
-use App\Models\Order;
 use App\Mail\LockoutMail;
 use App\Events\OrderCreated;
-use Illuminate\Auth\Events\Lockout;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class SendOrderConfirmation
 {
@@ -27,7 +22,11 @@ class SendOrderConfirmation
     public function handle(OrderCreated $event): void
     {
     
-        Mail::to('arojas@cantv.com.ve')->queue(new LockoutMail($event->orders));
+        Mail::raw('prueba de correo', function ($message) {
+            $message->subject('Correo de prueba');
+            $message->from('arojas@cantv.com.ve', 'Sistema de pedidos');
+            $message->to('arojas@cantv.com.ve');
+        });
 
     }
 }

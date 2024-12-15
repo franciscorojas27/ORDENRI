@@ -10,7 +10,8 @@ use Symfony\Component\HttpFoundation\Response;
 class BlockUser
 {
     /**
-     * Handle an incoming request.
+     * Maneja una solicitud entrante y verifica si el usuario esta bloqueado o eliminado, en cuyo caso
+     * se cierra la sesión y se redirige al login.
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */

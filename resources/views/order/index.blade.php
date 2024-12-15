@@ -12,15 +12,14 @@
     </x-slot>
     @vite(['resources/js/modalDeleteOrders.js'])
 
-    <div class="pb-4 lg:pt-4">
+    <div class="pb-4 lg:pt-4 ">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 @if (request()->routeIs('order.index'))
                     <div
                         class="bg-mejor-color border-8 m-4 p-6 dark:bg-mejor-color-dark dark:border-gray-700 w-lg rounded-lg shadow-lg  flex flex-wrap gap-6">
-
-                        @canany(['isAdmin', 'isSupervisor'], Auth::id())
-                            <!-- Resolution Area -->
+                    
+                        @can('isAdmin', Auth::user())
                             <div class="flex-1 min-w-[200px]">
                                 <form action="{{ route('order.index') }}" method="GET">
                                     <x-input-label for="resolution_area"
@@ -50,7 +49,7 @@
                                     </div>
                                 </form>
                             </div>
-                        @endcanany
+                        @endcan
 
                         <!-- Type -->
                         <div class="flex-1 min-w-[200px]">

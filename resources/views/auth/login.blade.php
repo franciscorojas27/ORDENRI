@@ -65,7 +65,7 @@
             </div>
 
             <!-- Botón de log in -->
-            <x-primary-button class="w-full mt-3 flex items-center justify-center">
+            <x-primary-button id="Login" class="w-full mt-3 flex items-center justify-center">
                 <svg class="w-6 h-6 mr-2" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round"

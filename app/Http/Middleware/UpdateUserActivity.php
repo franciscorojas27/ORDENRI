@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 class UpdateUserActivity
 {
     /**
-     * Handle an incoming request.
+     * Maneja una solicitud entrante y actualiza la ultima conexión del usuario a ahora y su estado de conexión a true.
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */

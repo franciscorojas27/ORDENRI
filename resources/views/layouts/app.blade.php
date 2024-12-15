@@ -30,7 +30,8 @@
             <main class="flex flex-col overflow-hidden">
 
                 <!-- Header (fijo en la parte superior) -->
-                <header class="fixed top-0 left-0 md:left-64 right-0 z-4 bg-white dark:bg-gray-900 shadow-sm shadow-b "                    :class="{
+                <header class="fixed top-0 left-0 md:left-64 right-0 z-50 bg-white dark:bg-gray-900 shadow-sm shadow-b "
+                    :class="{
                         'md:left-64': sideNav,
                         /* Cuando sideNav está abierto */
                         'md:left-0': !sideNav /* Cuando sideNav está oculto */
@@ -38,7 +39,7 @@
                     @include('layouts.navigation')
 
                     @isset($header)
-                        <header class="bg-white dark:bg-gray-900 shadow sm:hidden">
+                        <header class="block z-50 bg-white dark:bg-gray-800 shadow sm:hidden">
                             <div class="max-w-7xl mx-auto py-2 px-4 sm:px-6 lg:px-8">
                                 {{ $header }}
                             </div>
@@ -58,4 +59,3 @@
 
         </div>
     </body>
-

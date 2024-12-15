@@ -182,8 +182,9 @@ class Order extends Model
      */
     public function getButtonWidthClass()
     {   
-        // Verificar si la orden ya ha sido finalizada o no es el mismo usuario para poder poner el botón de retorno completo
         if ($this->finishOrder()) {
+            return 'w-25';
+        }elseif($this->acceptOrder()){
             return 'w-25';
         }
         return 'w-full';

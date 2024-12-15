@@ -17,6 +17,12 @@ class File extends Model
         'size',
         'order_id',
     ];
+    /**
+     * Relación de "pertenece a" (BelongsTo) con el modelo Order.
+     * Establece que el modelo actual (File) pertenece a una orden (Order).
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function order()
     {
         return $this->belongsTo(Order::class);

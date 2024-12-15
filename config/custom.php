@@ -44,7 +44,7 @@ return [
     */
     'defaults_job_title' => env('DEFAULTS_JOB_TITLE', 1),
     'defaults_resolution_area' => env('DEFAULTS_RESOLUTION_AREA', 1),
-
+    'defaults_passwords' => env('DEFAULTS_PASSWORDS', 'cantv1234'),
     /*
     |--------------------------------------------------------------------------
     | Tiempo de espera para desbloquear la cuenta

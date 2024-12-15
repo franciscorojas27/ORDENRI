@@ -8,24 +8,44 @@ Chart.register(...registerables);
  * @param {string[]} labels - Las etiquetas para el eje X del gráfico.
  * @param {string} datasetLabel - La etiqueta para el dataset.
  */
-async function createChart(chartId, dataUrl, labels, datasetLabel,dataSelector) {
-    const ctx = document.getElementById(chartId).getContext("2d");
-    let chartData = [0, 0, 0, 0, 0, 0, 0]; // Cambiar según el tamaño de tus datos
+const DEFAULT_SELECTED_DAYS = [
+    "Lunes",
+    "Martes",
+    "Miércoles",
+    "Jueves",
+    "Viernes",
+    "Sábado",
+    "Dom",
+];
 
+async function createBarChart(
+    chartId,
+    dataUrl,
+    labels,
+    datasetLabel,
+    dataSelector
+) {
+
+    const chartValues = document.getElementById(chartId);
+
+    const chartAt = JSON.parse(chartValues.dataset.values);
+    const month = chartAt[0];
+    const year = chartAt[1];
+    var ctx = chartValues.getContext("2d");    
+    let chartData = [0, 0, 0, 0, 0, 0, 0];
     try {
-        const response = await fetch(dataUrl, {
+        const response = await fetch(`${dataUrl}?month=${month}&year=${year}`, {
             method: "GET",
             headers: {
                 "X-Requested-With": "XMLHttpRequest",
             },
         });
         const data = await response.json();
-        chartData = data[0]; // Asegúrate de que el formato de datos sea correcto
+        chartData = data; 
     } catch (error) {
-        console.log("No se pudo obtener los datos de la API");
+        console.log("FATAL ERROR API");
     }
-
-    let selectedDays = 30; // Valor inicial para el rango de días
+    let selectedDays = 30; 
 
     const myChart = new Chart(ctx, {
         type: "line",
@@ -62,13 +82,98 @@ async function createChart(chartId, dataUrl, labels, datasetLabel,dataSelector) 
             myChart.update();
         });
 }
+function createPieChart(TitleText, PieChartID, LabelsValues) {
+    const canvas = document.getElementById(PieChartID);
 
+    const values = JSON.parse(canvas.dataset.values);
+
+    var ctx = canvas.getContext("2d");
+    const myPieChart = new Chart(ctx, {
+        type: "pie",
+        data: {
+            labels: LabelsValues,
+            datasets: [
+                {
+                    label: "Valor",
+                    data: values,
+                    backgroundColor: [
+                        "rgb(255, 99, 132)",
+                        "rgb(54, 162, 235)",
+                        "rgb(255, 205, 86)",
+                    ],
+                    hoverOffset: 4,
+                },
+            ],
+        },
+        options: {
+            responsive: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: TitleText,
+                    font: {
+                        size: 24,
+                        weight: "bold",
+                    },
+                    padding: {
+                        top: 20,
+                        bottom: 20,
+                    },
+                },
+                aspectRatio: 1,
+                legend: {
+                    position: "top",
+                    labels: {
+                        generateLabels: function (chart) {
+                            const data = chart.data;
+                            return data.labels.map((label, index) => {
+                                const value = data.datasets[0].data[index];
+                                return {
+                                    text: `${label}: ${value}`,
+                                    fillStyle:
+                                        data.datasets[0].backgroundColor[index],
+                                };
+                            });
+                        },
+                        font: {
+                            size: 20,
+                        },
+                    },
+                },
+                tooltip: {
+                    bodyFont: {
+                        size: 19,
+                    },
+                },
+            },
+        },
+    });
+}
 document.addEventListener("DOMContentLoaded", function () {
-    createChart("myChart", document.getElementById("myChart").getAttribute("data-url"), 
-                ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"], 
-                "Órdenes Terminadas","dayRange-1");
-    
-    createChart("myChart2", document.getElementById("myChart2").getAttribute("data-url"), 
-                ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"], 
-                "Órdenes Pendientes","dayRange-2");
+    createBarChart(
+        "myChart",
+        "/api/metrics",
+        DEFAULT_SELECTED_DAYS,
+        "Órdenes Terminadas",
+        "dayRange-1"
+    );
+    createPieChart("PORCENTAJE DE ORDENES CREADAS Y FINALIZADAS", "PieChart1", [
+        "Creadas",
+        "Finalizadas",
+    ]);
+    createPieChart("PORCENTAJE ORDENES M/S y FALLAS", "PieChart2", [
+        "M/S",
+        "FALLAS",
+    ]);
+});
+
+
+// mensaje de error si no consigue ninguna orden en el mes
+document.addEventListener("DOMContentLoaded", function () {
+    setTimeout(function () {
+        const element = document.querySelector(".bg-green-100");
+        if (element) {
+            element.remove();
+        }
+    }, 3000);
 });

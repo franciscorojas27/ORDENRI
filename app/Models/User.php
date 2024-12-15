@@ -298,17 +298,13 @@ class User extends Authenticatable
         $this->attributes['userid'] = $userid;
     }
     /**
-     * Mutador para el campo resolution_area_id
+     * Verifica si el usuario tiene permiso para crear órdenes.
      *
-     * @param mixed $value La identificación o el objeto de la  rea de resolución
-     * @return void
+     * @param \App\Models\User $this El usuario a verificar.
+     * @return bool Verdadero si el usuario tiene permiso para crear órdenes, falso de lo contrario.
      */
-    // public function setResolutionAreaAttribute($value)
-    // {
-    //     if (request()->routeIs('index.secure')) {
-    //         $this->attributes['resolution_area_id'] = $value->id;
-    //     } else {
-    //         $this->attributes['resolution_area_id'] = $value;
-    //     }
-    // }
+    public function canCreateOrder()
+    {
+        return $this->can_create_orders;
+    }
 }

@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
 let selectedRow = null;
 
+// cambio de color de la fila donde se a seleccionado el usuario
 
 document.querySelectorAll("td").forEach((el) => {
     el.addEventListener("click", function (event) {

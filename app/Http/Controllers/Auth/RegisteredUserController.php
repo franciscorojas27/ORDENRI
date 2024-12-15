@@ -48,9 +48,8 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
         $user->passwordRecords()->create(['password' => Hash::make($request->password)]);
-
         event(new Registered($user));
-
+        
         Auth::login($user);
 
         return redirect(route('order.index', absolute: false));

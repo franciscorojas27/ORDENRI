@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 class AdminUserVerification
 {
     /**
-     * Handle an incoming request.
+     * Verifica si el usuario tiene el rol de administrador y redirige a una pagina de error en caso de no tenerlo.
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */

@@ -1,8 +1,8 @@
 <?php
 
 use App\Models\User;
-use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Auth\Notifications\ResetPassword;
 
 test('reset password link screen can be rendered', function () {
     $response = $this->get('/forgot-password');
@@ -13,9 +13,12 @@ test('reset password link screen can be rendered', function () {
 test('reset password link can be requested', function () {
     Notification::fake();
 
-    $user = User::factory()->create();
+    $user = User::factory()->create([
+        'job_title_id' => 4,
+        'general_management_id' => 1, 
+    ]);
 
-    $this->post('/forgot-password', ['email' => $user->email]);
+    $response = $this->post('/forgot-password', ['email' => $user->email]);
 
     Notification::assertSentTo($user, ResetPassword::class);
 });
@@ -23,7 +26,10 @@ test('reset password link can be requested', function () {
 test('reset password screen can be rendered', function () {
     Notification::fake();
 
-    $user = User::factory()->create();
+    $user = User::factory()->create([
+        'job_title_id' => 4,
+        'general_management_id' => 1, 
+    ]);
 
     $this->post('/forgot-password', ['email' => $user->email]);
 
@@ -39,7 +45,10 @@ test('reset password screen can be rendered', function () {
 test('password can be reset with valid token', function () {
     Notification::fake();
 
-    $user = User::factory()->create();
+    $user = User::factory()->create([
+        'job_title_id' => 4,
+        'general_management_id' => 1, 
+    ]);
 
     $this->post('/forgot-password', ['email' => $user->email]);
 
@@ -47,8 +56,8 @@ test('password can be reset with valid token', function () {
         $response = $this->post('/reset-password', [
             'token' => $notification->token,
             'email' => $user->email,
-            'password' => 'password',
-            'password_confirmation' => 'password',
+            'password' => 'password1111',
+            'password_confirmation' => 'password1111',
         ]);
 
         $response

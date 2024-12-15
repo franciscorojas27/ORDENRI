@@ -25,7 +25,7 @@ class OrderController extends Controller
      * 
      * @param Request $request La solicitud HTTP que contiene los filtros de búsqueda.
      * @var \App\Models\User $user El usuario autenticado.
-     * @return \Illuminate\View\View La vista que muestra las órdenes filtradas.
+     * @return \Illuminate\View\View La vista que muestra las órdenes filtradas.     * 
      */
     public function index(Request $request)
     {
@@ -40,7 +40,7 @@ class OrderController extends Controller
                 })
                 : $query->where('client_id', Auth::id());
         } elseif ($user->isAdmin()) {
-            $query->where('resolution_area_id', $user->resolution_area_id);
+            $query->where('resolution_area_id', '!=', null);
         }
 
         $message = $this->applyFilters($request, $query);
@@ -57,12 +57,23 @@ class OrderController extends Controller
             'getRedirectRoute' => fn($order) => $this->getRedirectRouteToShow($order),
         ]);
     }
-
+    /**
+     * Muestra el formulario para crear una nueva orden.
+     * 
+     * @return \Illuminate\View\View La vista que muestra el formulario para crear una orden.
+     */
     public function create()
     {
         return view('order.create', ['types' => Type::all(), 'resolution_areas' => Resolution_Area::all()]);
     }
-
+    /**
+     * Crea una nueva orden con los datos enviados en la solicitud HTTP.
+     * La orden se crea con un estado de "Enviado" y se notifica a los
+     * responsables de la dependencia correspondiente.
+     * 
+     * @param  \App\Http\Requests\StoreOrderRequest  $request La solicitud HTTP que contiene los datos de la orden.
+     * @return \Illuminate\Http\RedirectResponse La respuesta HTTP que redirige al usuario a la lista de órdenes.
+     */
     public function store(StoreOrderRequest $request)
     {
         $order = Order::create([
@@ -93,8 +104,15 @@ class OrderController extends Controller
 
         return redirect()->route('order.index');
     }
-
-
+    /**
+     * Muestra los detalles de una orden específica.
+     *
+     * Carga los archivos asociados a la orden dada y pasa los datos necesarios
+     * a la vista 'order.show'.
+     *
+     * @param Order $order La orden a mostrar.
+     * @return \Illuminate\View\View La vista que muestra los detalles de la orden.
+     */
     public function show(Order $order)
     {
         return view('order.show', [
@@ -102,7 +120,6 @@ class OrderController extends Controller
             'redirectRoute' => $this->getRedirectRouteToIndex(),
         ]);
     }
-
     /**
      * Muestra el formulario de edición para una orden específica.
      * Carga los archivos asociados a la orden y pasa los datos necesarios a la vista.
@@ -122,7 +139,16 @@ class OrderController extends Controller
             'applicantToList' => User::getEmployeesByJobTitle($order->resolution_area_id, ['Supervisor', 'Analista'])
         ]);
     }
-
+    /**
+     * Actualiza una orden especifica en la base de datos.
+     *
+     * Lanza el evento OrderStatusUpdated y actualiza los campos de la orden con los datos
+     * proporcionados en la solicitud.
+     *
+     * @param \App\Http\Requests\UpdateOrderRequest $request La solicitud HTTP con los datos a actualizar.
+     * @param \App\Models\Order $order La orden que se va a actualizar.
+     * @return \Illuminate\Http\Response La respuesta HTTP con la redirección a la vista de edición de la orden.
+     */
     public function update(UpdateOrderRequest $request, Order $order)
     {
         event(new OrderStatusUpdated($order));
@@ -144,7 +170,18 @@ class OrderController extends Controller
         ]);
         return redirect()->route('order.index');
     }
-
+    /**
+     * Actualiza el estado de una orden en función de su estado actual y agrega una descripción.
+     *
+     * Si el estado actual es 1 (Pendiente), se establece el estado en 2 (En curso), se agrega la fecha de inicio y se establece el usuario actual como responsable.
+     * Si el estado actual es 2 (En curso), se establece el estado en 3 (Finalizada), se agrega la fecha de finalización y se mantiene el responsable actual.
+     * Luego, se lanza el evento OrderStatusUpdated y se actualiza la orden en la base de datos.
+     * Finalmente, se redirige a la vista de índice de órdenes.
+     *
+     * @param  \App\Models\Order  $order La orden que se va a actualizar.
+     * @param  \Illuminate\Http\Request  $request La solicitud HTTP con la descripción de la orden.
+     * @return \Illuminate\Http\Response La respuesta HTTP con la redirección a la vista de índice de órdenes.
+     */
     public function orderFlow(Order $order, Request $request)
     {
         $request->validate([
@@ -167,6 +204,16 @@ class OrderController extends Controller
         return redirect()->route('order.index');
     }
 
+    /**
+     * Devuelve la ruta adecuada para redirigir a la vista de índice de órdenes dependiendo de la ruta actual.
+     *
+     * Si la ruta actual es "order.consultation.show", redirige a "order.consultation.index".
+     * Si la ruta actual es "order.show", redirige a "order.index".
+     * Si la ruta actual es "order.group.show", redirige a "order.group.index".
+     * En cualquier otro caso, redirige a "order.index".
+     *
+     * @return string La ruta de redirección adecuada.
+     */
     public function getRedirectRouteToIndex()
     {
         if (request()->routeIs('order.consultation.show')) {

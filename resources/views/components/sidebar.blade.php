@@ -48,7 +48,7 @@
                     </path>
                 </svg>
                 <!-- Texto -->
-                {{__('Pending Orders')}}
+                {{ __('Pending Orders') }}
             </a>
         @endcannot
         <a href="{{ route('order.consultation.index') }}"
@@ -60,7 +60,7 @@
                     d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"></path>
             </svg>
             <!-- Texto -->
-            {{__('Orders Consultation')}}
+            {{ __('Orders Consultation') }}
         </a>
 
         @can('isAdmin', Auth::user())
@@ -75,10 +75,10 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4.867 19.125h.008v.008h-.008v-.008Z"></path>
                 </svg>
                 <!-- Texto -->
-                {{__("Administrator")}}
+                {{ __('Administrator') }}
             </a>
         @endcan
-        @cannot('isClient', Auth::user())
+        {{-- @cannot('isClient', Auth::user())
             <a href="#"
                 class="flex items-center px-5 py-3 mb-2 ml-4 mr-4 font-bold text-[#121212] dark:text-gray-600 rounded-md transition duration-200 cursor-not-allowed">
                 <svg class="w-6 h-6 mr-2" data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor"
@@ -89,7 +89,7 @@
                 </svg>
                 {{__('Indicators')}}
             </a>
-        @endcannot
+        @endcannot --}}
         @cannot('isClient', Auth::user())
             <a href="{{ route('dashboard') }}"
                 class="flex items-center px-5 py-3 mb-2 ml-4 mr-4 font-bold text-black dark:text-white rounded-md transition duration-200 hover:bg-blue-600 hover:text-white {{ request()->routeIs('dashboard') ? 'bg-blue-600 text-white' : '' }}">
@@ -101,7 +101,7 @@
                     </path>
                 </svg>
                 <!-- Texto -->
-                {{__('Statistics')}}
+                {{ __('Statistics') }}
             </a>
         @endcannot
 
@@ -119,6 +119,8 @@
                     class="absolute w-6 h-6 transition-all duration-300 ease-in-out bg-white rounded-full shadow-md left-1 top-1 peer-checked:translate-x-6 peer-checked:bg-white"></span>
             </label>
         </div>
-        <h2 class="mr-4 ml-4 fixed bottom-0 text-sm text-black dark:text-white">© 2024 {{ config('app.name', 'Laravel') }}</h2>
+        <img src="{{ asset('Server_isAlive.gif') }}" alt="Server is alive" desc="Server is alive">
+        <h2 class="mr-4 ml-4 fixed bottom-0 text-sm text-black dark:text-white">© 2024
+            {{ config('app.name', 'Laravel') }}</h2>
     </nav>
 </aside>

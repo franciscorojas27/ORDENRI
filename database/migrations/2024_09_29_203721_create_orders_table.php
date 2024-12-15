@@ -24,9 +24,9 @@ return new class extends Migration
             $table->string('client_description', 500);
             $table->string('description', 500)->nullable()->default(null);
             $table->timestamp('evaluation_at')->nullable();
+            $table->timestamp('closed_at')->nullable();
             $table->timestamp('start_at')->nullable();
             $table->timestamp('end_at')->nullable();
-            $table->timestamp('closed_at')->nullable();
             $table->timestamps();
         });
         

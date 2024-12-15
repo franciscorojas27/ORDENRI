@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
+use App\Notifications\AccountLockedNotification;
 
 class LoginRequest extends FormRequest
 {
@@ -35,11 +36,11 @@ class LoginRequest extends FormRequest
     {
         return [
             // 'email' => ['required', 'string', 'email'],
-            'userid' => ['required', 'string', 'max:8','exists:users,userid'],
+            'userid' => ['required', 'string', 'max:8', 'exists:users,userid'],
             'password' => ['required', 'string', 'min:8', 'max:20'],
         ];
     }
-    
+
     /**
      * Get custom attributes for validator errors.
      *
@@ -59,6 +60,7 @@ class LoginRequest extends FormRequest
     public function authenticate(): void
     {
         $user = User::where('userid', $this->input('userid'))->first();
+
         if ($user) {
             $this->merge(['email' => $user->email]);
         }
@@ -82,7 +84,13 @@ class LoginRequest extends FormRequest
         RateLimiter::clear($this->throttleKeyIp());
         RateLimiter::clear($this->throttleKeyEmail());
     }
-
+    /**
+     * Comprueba si el usuario ha excedido el límite de intentos de inicio de sesión.
+     *
+     * Si el usuario ha excedido el límite de intentos, se bloquea su cuenta y se envía un correo electrónico con la lista de pedidos.
+     *
+     * @return void
+     */
     protected function checkRateLimits(): void
     {
         $maxAttempts = config('custom.login_max_attempts', 5);
@@ -92,11 +100,12 @@ class LoginRequest extends FormRequest
             RateLimiter::tooManyAttempts($this->throttleKeyEmail(), $maxAttempts)
         ) {
 
-            $user = $this->userExists();
+            $user = User::where('userid', $this->input('userid'))->first();
 
             if ($user && !$user->isBlocked()) {
+                $user->notify(new AccountLockedNotification($user));
                 $user->update(['is_blocked' => true]);
-                Mail::to($user->email)->send(new LockoutMail(Order::all()));
+
             }
 
             throw ValidationException::withMessages([
@@ -104,27 +113,6 @@ class LoginRequest extends FormRequest
             ]);
         }
     }
-
-
-    // original del rate limited 
-    // public function ensureIsNotRateLimited(): void
-    // {
-    //     if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
-    //         return;
-    //     }
-
-    //     event(new Lockout($this));
-
-    //     $seconds = RateLimiter::availableIn($this->throttleKey());
-
-    //     throw ValidationException::withMessages([
-    //         'email' => trans('auth.throttle', [
-    //             'seconds' => $seconds,
-    //             'minutes' => ceil($seconds / 60),
-    //         ]),
-    //     ]);
-    // }
-
     /**
      * Get the rate limiting throttle key for the request.
      */
@@ -132,11 +120,24 @@ class LoginRequest extends FormRequest
     {
         return Str::transliterate(Str::lower($this->email));
     }
-
+    /**
+     * Genera una clave de limitador de velocidad para la petición que se basa en la IP del usuario.
+     *
+     * @return string
+     */
     public function throttleKeyIp(): string
     {
         return Str::transliterate($this->ip());
     }
+    /**
+     * Verifica si el usuario ha sido eliminado, si su cuenta está bloqueada o si
+     * la contraseña ha caducado y lanza una excepción con mensajes de error
+     * correspondientes.
+     *
+     * @param User $user
+     * @return void
+     * @throws ValidationException
+     */
     protected function validationValuesLogin(User $user)
     {
         if ($user?->isDeleted()) {
@@ -154,11 +155,5 @@ class LoginRequest extends FormRequest
                 'userid' => 'La clave no ha sido actualizada hace más de ' . config('custom.days_before_notifying_password_expiration', 30) . ' días, restablezca su contraseña para seguir.',
             ]);
         }
-    }
-
-
-    protected function userExists()
-    {
-        return User::whereEmail($this->email)->first();
     }
 }

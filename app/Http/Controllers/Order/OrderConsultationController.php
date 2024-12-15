@@ -35,22 +35,20 @@ class OrderConsultationController extends Controller
             // Validación de los parámetros del request.
             $request->validate([
                 'month' => 'required|integer|between:1,12',
-                'year' => 'required|integer|digits:4|between:2015,' . date('Y'),
+                'year' => 'required|integer|digits:4|between:2012,' . date('Y'),
                 'applicant_to' => 'nullable|integer|exists:users,id',
                 'responsible_to' => 'nullable|integer|exists:users,id',
             ]);
             $orders = Order::query()
-                ->whereYear('created_at', $request->year) // Filtrar por año.
-                ->whereMonth('created_at', $request->month) // Filtrar por mes.
-                ->when($request->applicant_to, fn($query) => $query->where('applicant_to_id', $request->applicant_to)) // Filtrar por solicitante si está presente.
-                ->when($request->responsible_to, fn($query) => $query->where('responsible_id', $request->responsible_to)) // Filtrar por responsable si está presente.
-                ->orderBy('created_at', 'asc') // Ordenar por fecha de creación.
+                ->whereYear('created_at', $request->year) 
+                ->whereMonth('created_at', $request->month) 
+                ->when($request->applicant_to, fn($query) => $query->where('applicant_to_id', $request->applicant_to)) 
+                ->when($request->responsible_to, fn($query) => $query->where('responsible_id', $request->responsible_to)) 
+                ->orderBy('created_at', 'asc') 
                 ->get();
 
-            // Mensaje flash con la cantidad de órdenes encontradas.
             session()->flash('message', "Se encontraron {$orders->count()} ordenes para el mes {$request->month} del año {$request->year}.");
 
-            // Definir la ruta de redirección según la ruta actual.
             $getRedirectRoute = fn($order) => route(
                 request()->routeIs('order.group.index') || request()->routeIs('order.group.show')
                 ? 'order.group.show'
@@ -58,11 +56,9 @@ class OrderConsultationController extends Controller
                 $order
             );
 
-            // Retornar la vista con los datos procesados.
             return view('order-consultation.index', compact('orders', 'getRedirectRoute', 'supervisor', 'responsible'));
         }
 
-        // Retornar la vista inicial si no se proporcionan filtros.
         return view('order-consultation.index', compact('supervisor', 'responsible'));
     }
     /**

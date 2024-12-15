@@ -131,7 +131,7 @@
                     @csrf
                     @method('PUT')
                     <x-input-label for="description" class="mt-2" :value="__('Activity')" />
-
+                    
                     @if (Auth::user()->isClient())
                         <x-textarea required readonly id="description" name="description" rows="4"
                             cols="65" style="resize: none;" class="mt-2 block w-full">

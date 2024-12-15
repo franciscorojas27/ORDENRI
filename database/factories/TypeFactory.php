@@ -27,7 +27,7 @@ class TypeFactory extends Factory
     public static function createOrderedTypes(): array
     {
         return array_map(fn($title) => Type::create(['type' => $title]), [
-            'Requerimiento',
+            'Mantenimiento',
             'Soporte',
             'Falla',
         ]);

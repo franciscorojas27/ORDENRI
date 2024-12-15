@@ -1,5 +1,4 @@
 <x-app-layout>
-
     @vite(['resources/js/coloredRows.js'])
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
@@ -40,22 +39,22 @@
                                     Id
                                 </th>
                                 <th class="px-6 py-3 text-left text-sm font-medium text-gray-900 dark:text-white uppercase tracking-wider">
-                                    Nombre
+                                    {{__('Name')}}
                                 </th>
                                 <th class="px-6 py-3 text-left text-sm font-medium text-gray-900 dark:text-white uppercase tracking-wider">
-                                    Email
+                                    {{__('Email')}}
                                 </th>
                                 <th class="px-6 py-3 text-left text-sm font-medium text-gray-900 dark:text-white uppercase tracking-wider">
-                                    connectado
+                                    {{__('Connected')}}
                                 </th>
                                 <th class="px-6 py-3 text-left text-sm font-medium text-gray-900 dark:text-white uppercase tracking-wider">
-                                    Gerencia general
+                                    {{__('General management')}}
                                 </th>
                                 <th class="px-6 py-3 text-left text-sm font-medium text-gray-900 dark:text-white uppercase tracking-wider">
-                                    Rol
+                                    {{__('Rol')}}
                                 </th>
                                 <th class="px-6 py-3 text-left text-sm font-medium text-gray-900 dark:text-white uppercase tracking-wider">
-                                    Seleccionar
+                                    {{ __('Select') }}
                                 </th>
                             </tr>
                         </thead>

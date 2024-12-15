@@ -9,9 +9,10 @@ use App\Http\Controllers\Order\orderGroupController;
 Route::middleware(['auth', 'verified', 'updateUserActivity'])->group(function () {
     Route::get('orders', [OrderController::class, 'index'])->name('order.index');
     Route::get('orders/{order}', [OrderController::class, 'show'])->where('order', '[0-9]+')->name('order.show');
-    Route::get('orders/create', [OrderController::class, 'create'])->name('order.create');
-    Route::post('orders/create', [OrderController::class, 'store'])->name('order.store');
-
+    Route::middleware('canCreateOrder')->group(function () {
+        Route::get('orders/create', [OrderController::class, 'create'])->name('order.create');
+        Route::post('orders/create', [OrderController::class, 'store'])->name('order.store');
+    });
     Route::middleware('clientVerified')->group(function () {
         Route::put('orders/{order}', [OrderController::class, 'orderFlow'])->name('order.flow');
         Route::middleware('blockAnalyzer')->group(function () {

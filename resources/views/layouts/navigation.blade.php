@@ -17,7 +17,7 @@
                 <div class="hidden
                 md:flex lg:flex lg:items-center">
                     <button @click="toggleSideNav()"
-                        class="flex text-black dark:text-white  dark:hover:bg-gray-800 items-center rounded-full shadow-lg transform hover:scale-105 transition-transform duration-200 top-4 left-4 z-50">
+                        class="flex text-black dark:text-white  dark:hover:bg-gray-800 items-center rounded-full shadow-lg transform hover:scale-105 transition-transform duration-200 top-4 left-4 z-100">
                         <svg class="w-10 justify-center  h-10 " data-slot="icon" fill="none" stroke-width="1.5"
                             stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
                             aria-hidden="true">
@@ -92,9 +92,32 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
+            <x-responsive-nav-link :href="route('order.index')">
+                {{ __('Orders') }}
             </x-responsive-nav-link>
+            @cannot('isClient', Auth::user())
+                <x-responsive-nav-link :href="route('order.group.index')">
+                    {{ __('Pending Orders') }}
+                </x-responsive-nav-link>
+            @endcannot
+            @can('canCreateOrder', Auth::user())
+                <x-responsive-nav-link :href="route('order.index')">
+                    {{ __('Create Order') }}
+                </x-responsive-nav-link>
+            @endcan
+            <x-responsive-nav-link :href="route('order.consultation.index')">
+                {{ __('Orders Consultation') }}
+            </x-responsive-nav-link>
+            @can('isAdmin', Auth::user())
+                <x-responsive-nav-link :href="route('admin-secure.index')">
+                    {{ __('User Administrator') }}
+                </x-responsive-nav-link>
+            @endcan
+            @cannot(['isClient', 'isAnalyzer'], Auth::user())
+                <x-responsive-nav-link :href="route('dashboard')">
+                    {{ __('Statistics') }}
+                </x-responsive-nav-link>
+            @endcannot
         </div>
 
         <!-- Responsive Settings Options -->
@@ -108,9 +131,6 @@
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('profile.edit')">
                     {{ __('Profile') }}
-                </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('order.index')">
-                    {{ __('Orders') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-div>
                     <div class="flex items-center sm:ml-auto">

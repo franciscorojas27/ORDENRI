@@ -13,6 +13,13 @@ class OrderSeeder extends Seeder
      */
     public function run(): void
     {
-        Order::factory(count: 20)->create();
+        // Crear 50 órdenes con estado pendiente
+        // Order::factory()->count(10)->orderStatusPending()->create();
+
+        // Crear 30 órdenes con estado iniciado
+        // Order::factory()->count(10)->orderStatusStarted()->create();
+
+        // Crear 20 órdenes con estado finalizado
+        Order::factory()->count(60)->orderStatusEnd()->create();
     }
 }
