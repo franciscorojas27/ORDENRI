@@ -27,8 +27,6 @@ class UpdateOrderRequest extends FormRequest
     public function __construct()
     {
         $this->fields = [
-            'client_id' => ['required', 'string', 'max:255'],
-            'name' => ['required', 'string', 'max:255'],
             'created_at' => ['required', 'date_format:Y-m-d H:i:s'],
             'start_at' => [
                 'exclude_if:start_at,' . config('validation.text_for_start_at_edit'),
@@ -75,8 +73,6 @@ class UpdateOrderRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'client_id' => 'Número de orden',
-            'name' => 'solicitante',
             'created_at' => 'fecha de creación',
             'start_at' => 'fecha de inicio',
             'end_at' => 'fecha de finalización',
@@ -84,7 +80,7 @@ class UpdateOrderRequest extends FormRequest
             'type_id' => 'tipo',
             'responsible_id' => 'Supervisor',
             'resolution_area_id' => 'áreas de solución',
-            'applicant_To_id' => 'responsable',
+            'applicant_to_id' => 'responsable',
             'client_description' => 'descripción del solicitante',
             'description' => 'actividad',
         ];
@@ -115,24 +111,33 @@ class UpdateOrderRequest extends FormRequest
                     'start_at' => now(),
                     'end_at' => null,
                 ]);
+                if (!$this->filled('applicant_to_id')) {
+                    throw ValidationException::withMessages([
+                        'applicant_to_id' => 'El campo responsable es obligatorio.',
+                    ]);
+                }
             } elseif ($statusId == 3) {
                 $this->merge([
                     'start_at' => $this->input('start_at') == config('validation.text_for_start_at_edit') ? now() : $this->input('start_at'),
                     'end_at' => now(),
                 ]);
+                if (!$this->filled('applicant_to_id')) {
+                    throw ValidationException::withMessages([
+                        'applicant_to_id' => 'El campo responsable es obligatorio.',
+                    ]);
+                }
             } elseif (in_array($statusId, [5, 6, 7, 8])) {
 
-                if (is_null($this->input('start_at'))) {
-                    $this->merge(['start_at' => now()]);
-                }
                 $this->merge([
-                    'end_at' => now(),
+                    'start_at' => $this->validDate('start_at', config('validation.text_for_start_at_edit')) ?? now(),
+                    'end_at' => $this->validDate('end_at', config('validation.text_for_end_at_edit')) ?? now(),
                 ]);
             }
         }
 
         if ($this->user()->can('isAdmin', $this->user()) || $this->user()->can('isSupervisor', $this->user())) {
-            return $this->all();
+            $data = $this->except(['order_id', 'name']);
+            return $data;
         } else {
             throw ValidationException::withMessages([
                 'authorization' => 'No tienes permiso para realizar esta acción.',
@@ -140,4 +145,17 @@ class UpdateOrderRequest extends FormRequest
         }
     }
 
+
+    /**
+     * Valida si el campo tiene un valor de fecha válido.
+     * Devuelve null si el campo tiene el texto 'No iniciado' (o definido en la configuración).
+     * 
+     * @param string $field
+     * @return mixed
+     */
+    private function validDate($field, $invalidText)
+    {
+        $value = $this->input($field);
+        return $value === $invalidText ? null : $value;
+    }
 }

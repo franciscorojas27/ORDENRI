@@ -7,8 +7,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashBoardController;
 
 
-Route::middleware(['auth','verified', 'updateUserActivity','userValidated','clientVerified','blockAnalyzer'])->group(function () {
-    Route::get('/dashboard', [DashBoardController::class, 'index'])->name('dashboard');
+Route::middleware(['auth','verified', 'updateUserActivity','userValidated'])->group(function () {
+    Route::get('/dashboard', [DashBoardController::class, 'index'])->name('dashboard')->middleware('clientVerified','blockAnalyzer');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

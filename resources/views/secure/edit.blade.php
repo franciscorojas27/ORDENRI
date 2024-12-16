@@ -151,7 +151,7 @@
                         <div
                             class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 p-4 shadow-md rounded-lg">
                             <x-input-label for="coordination_management" :value="__('Coordination/Management')" />
-                            <x-text-input readonly id="coordination_management" class="block mt-2 w-full"
+                            <x-text-input  id="coordination_management" class="block mt-2 w-full"
                                 type="text" name="coordination_management" :value="old('coordination_management', $user->coordination_management)" />
                             <x-input-error :messages="$errors->get('coordination_management')" class="mt-2" />
                         </div>

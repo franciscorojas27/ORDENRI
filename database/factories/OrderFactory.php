@@ -23,6 +23,13 @@ class OrderFactory extends Factory
             'type_id' => $this->faker->numberBetween(1, 3),
             'client_description' => $this->faker->text(400),
             'description' => $this->faker->randomElement([null, $this->faker->text(400)]),
+            'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
+            'start_at' => $this->faker->dateTimeBetween('now', '+1 month'),
+            'end_at' => $this->faker->dateTimeBetween('+1 month', '+2 months'),
+            'status_id' => $this->faker->numberBetween(1, 3),
+            'client_id' => $this->getRandomClientId($this->faker->numberBetween(1, 4)),
+            'applicant_to_id' => $this->getRandomApplicantId($this->faker->numberBetween(1, 4)),
+            'responsible_id' => $this->getRandomResponsibleId($this->faker->numberBetween(1, 4)),
         ];
     }
 

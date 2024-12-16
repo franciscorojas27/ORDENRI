@@ -117,7 +117,7 @@ class AdminSecureUsersController extends Controller
     public function resetPassword(User $user)
     {
         $user->update(['password' => Hash::make(config('custom.defaults_passwords', 'cantv1234'))]);
-        return back();
+        return redirect()->route('admin-secure.edit', $user->id);
     }
 
 }

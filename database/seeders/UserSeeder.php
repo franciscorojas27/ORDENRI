@@ -20,6 +20,7 @@ class UserSeeder extends Seeder
             'last_name' => 'del sistema',
             'resolution_area_id' => 1,
             'job_title_id' => 4,
+            'can_create_orders' => 1,
             'phone' => '04121234567',
             'ip_address' => '127.0.0.1',
             'password_may_expire' => true,

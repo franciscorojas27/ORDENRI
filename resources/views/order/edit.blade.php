@@ -16,21 +16,18 @@
                     <div class="grid grid-cols-2 gap-6">
                         <!-- Order id -->
                         <div>
-                            <x-input-label for="client_id" class="mt-2" :value="__('N°')" />
-                            <x-text-input required readonly id="client_id" class="block mt-2 w-full" type="text"
-                                name="client_id" :value="old('client_id', $order->id)" />
-                            <x-input-error :messages="$errors->get('client_id')" class="mt-2" />
+                            <x-input-label for="order_id" class="mt-2" :value="__('N°')" />
+                            <x-text-input required readonly id="order_id" class="block mt-2 w-full" type="text"
+                                name="order_id" :value="old('order_id', $order->id)" />
                         </div>
                         <!-- Client Values-->
                         <div>
                             <x-input-label for="name" class="mt-2" :value="__('Applicant')" />
                             <x-text-input required readonly id="name" class="block mt-2 w-full" type="text"
                                 name="name" :value="old('name', $order->client->name . ' ' . $order->client->last_name)" />
-                            <x-input-error :messages="$errors->get('name')" class="mt-2" />
                         </div>
 
                     </div>
-
                     <div class="grid grid-cols-2 gap-6">
                         <!-- Created At -->
                         <div>
@@ -123,7 +120,8 @@
                             <x-input-label for="responsible_id" class="mt-2" :value="__('Supervisor')" />
                             <select name="responsible_id" id="responsible_id"
                                 class="block mt-2 w-full text-black rounded-md shadow-sm border-gray-500 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 appearance-none">
-                                <option value="" disabled {{ is_null($order->responsible_id) ? 'selected' : '' }} class="text-gray-500">
+                                <option value="" disabled {{ is_null($order->responsible_id) ? 'selected' : '' }}
+                                    class="text-gray-500">
                                     {{ __('Select an option') }}
                                 </option>
                                 @foreach ($supervisors as $supervisor)
@@ -173,9 +171,9 @@
                                     </option>
                                 @endforeach
                             </select>
-                            <x-input-error :messages="$errors->get('applicantTo')" class="mt-2" />
+                            <x-input-error :messages="$errors->get('applicant_to_id')" class="mt-2" />
                         </div>
-                        
+
                     </div>
                     <!-- Files -->
                     <div class="mt-4">
