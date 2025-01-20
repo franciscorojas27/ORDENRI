@@ -1,5 +1,5 @@
 <aside x-show="sideNav" style=" transition: none; transform: translate-x-0; opacity: 1;"
-    class="overflow-y-auto hidden md:block bg-[#33ccff] dark:bg-gray-900 h-screen z-40 w-64 text-[#E8F5FF]
+    class="overflow-y-auto hidden md:block bg-white dark:bg-gray-900 h-screen z-40 w-64 text-[#E8F5FF]
     dark:text-white shadow-2xl drop-shadow-md">
     <!-- Sidebar Header -->
     <div
@@ -15,7 +15,7 @@
     <nav class="mt-3">
         @can('canCreateOrder', Auth::user())
             <a href="{{ route('order.create') }}"
-                class="bg-green-500 dark:bg-white hover:bg-white hover:text-black text-white dark:text-black m-4 font-bold py-2 px-4 rounded flex items-center">
+                class="bg-green-500 dark:bg-white hover:bg-blue-600 hover:text-black text-white dark:text-black m-4 font-bold py-2 px-4 rounded flex items-center">
                 <svg class="h-5 w-5 m-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd"
                         d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
@@ -119,8 +119,9 @@
                     class="absolute w-6 h-6 transition-all duration-300 ease-in-out bg-white rounded-full shadow-md left-1 top-1 peer-checked:translate-x-6 peer-checked:bg-white"></span>
             </label>
         </div>
-        <img src="{{ asset('Server_isAlive.gif') }}" alt="Server is alive" desc="Server is alive">
-        <h2 class="mr-4 ml-4 fixed bottom-0 text-sm text-black dark:text-white">© 2024
+        {{-- <img src="{{ asset('Server_isAlive.gif') }}" alt="Server is alive" desc="Server is alive"> --}}
+        <h2 class="mr-4 ml-4 fixed bottom-0 text-sm text-black dark:text-white">© 
+            {{ date('Y') }}
             {{ config('app.name', 'Laravel') }}</h2>
     </nav>
 </aside>

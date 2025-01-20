@@ -13,7 +13,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
         $this->call([
             JobTitleSeeder::class,
             StatusSeeder::class,
@@ -24,11 +23,6 @@ class DatabaseSeeder extends Seeder
             OrderSeeder::class,
             // Agrega otros seeders aquí según sea necesario
         ]);
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'job_title_id' => '1',
-        //     'email' => 'test@example.com',
-            
-        // ]);
+    
     }
 }

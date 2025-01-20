@@ -15,6 +15,7 @@ class AdminUserVerification
      */
     public function handle(Request $request, Closure $next): Response
     { 
+        
         if (!request()->user()->hasRole('Administrador')) {
             return response()->redirectToRoute('404');
         }

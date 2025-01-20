@@ -66,4 +66,15 @@ return [
     */
     'days_before_notifying_password_expiration' => env('DAYS_BEFORE_NOTIFY_IF_CHANGE_YOUR_PASSWORD', 30),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Contraseña predeterminada para el administrador
+    |--------------------------------------------------------------------------
+    |
+    | La contraseña predeterminada para el administrador. Esta contraseña se utiliza
+    | al crear el usuario administrador y no se especifica una contraseña.
+    |
+    */
+    'default_admin_password' => env('DEFAULT_ADMIN_PASSWORD', 123456789),
+
 ];
