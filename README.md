@@ -1,66 +1,167 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+🚀 ORDENRI: Sistema de Gestión de Órdenes de Servicio para la Red Inteligente de Cantv
+✨ Descripción del Proyecto
+ORDENRI es una aplicación web integral diseñada para optimizar y centralizar la gestión de órdenes de servicio (OS) relacionadas con las fallas en la red inteligente de Cantv. Permite un control eficiente de todo el ciclo de vida de una OS, desde su creación hasta su resolución, facilitando el seguimiento, la asignación de recursos y la visualización de indicadores clave de rendimiento (KPIs).
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Desarrollada con Laravel, MySQL, Blade, Alpine.js y Tailwind CSS, ORDENRI aprovecha todas las funcionalidades del framework Laravel para ofrecer una solución robusta, escalable y con una interfaz de usuario moderna y responsiva. Incluye un sistema de autenticación personalizado basado en Laravel Breeze, asegurando un control de acceso seguro.
 
-## About Laravel
+💡 Características Principales
+Gestión Completa de Órdenes de Servicio:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Creación, visualización, edición y eliminación de órdenes de servicio.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Registro detallado de la falla, ubicación, equipo afectado y datos del cliente.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Asignación de órdenes a técnicos o cuadrillas.
 
-## Learning Laravel
+Seguimiento de Estado en Tiempo Real:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Flujo de trabajo configurable para el cambio de estado de las órdenes (Ej: Creada, Asignada, En Proceso, Resuelta, Cerrada).
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Historial de cambios y acciones realizadas en cada orden.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Gestión de Usuarios y Roles:
 
-## Laravel Sponsors
+Sistema de autenticación y autorización robusto (Laravel Breeze modificado).
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Definición de roles con diferentes niveles de acceso y permisos (Ej: Administrador, Coordinador, Técnico, Supervisor).
 
-### Premium Partners
+Módulo de Reportes e Indicadores (KPIs):
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+Visualización de métricas clave sobre el rendimiento en la resolución de fallas.
 
-## Contributing
+Generación de informes sobre tiempos de respuesta, cantidad de fallas por zona, etc.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Gestión de Acuerdos de Nivel de Servicio (SLAs) para medir el cumplimiento.
 
-## Code of Conduct
+Interfaz de Usuario Intuitiva y Moderna:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Desarrollada con Blade (vistas) y Tailwind CSS (estilos) para un diseño adaptable y atractivo.
 
-## Security Vulnerabilities
+Funcionalidades interactivas con Alpine.js para una experiencia de usuario dinámica.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Base de Datos Relacional:
 
-## License
+Utiliza MySQL para una gestión eficiente y segura de los datos.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Desarrollo Eficiente:
+
+Aprovecha las migraciones, seeders, Eloquent ORM, y el sistema de ruteo de Laravel.
+
+Pruebas Automatizadas:
+
+Incluye tests (pruebas unitarias y de integración) para asegurar la estabilidad y el correcto funcionamiento de las funcionalidades.
+
+🛠️ Tecnologías Utilizadas
+Backend:
+
+Laravel: PHP Framework para el desarrollo web.
+
+PHP: Lenguaje de programación.
+
+MySQL: Sistema de Gestión de Bases de Datos Relacionales.
+
+Frontend:
+
+Blade: Motor de plantillas de Laravel.
+
+Alpine.js: Framework JavaScript ligero para el comportamiento reactivo.
+
+Tailwind CSS: Framework CSS utilitario para un diseño rápido y responsivo.
+
+Autenticación:
+
+Laravel Breeze: Kit de inicio de autenticación (versión editada).
+
+Herramientas de Desarrollo:
+
+Composer: Gestor de dependencias para PHP.
+
+Node.js y NPM/Yarn: Gestores de paquetes para JavaScript.
+
+Vite: Bundler para el frontend.
+
+⚙️ Requisitos del Sistema
+Antes de instalar y ejecutar ORDENRI, asegúrese de tener los siguientes componentes en su entorno:
+
+Servidor Web: Nginx o Apache.
+
+PHP: Versión 8.1 o superior.
+
+MySQL: Versión 8.0 o superior.
+
+Composer: Última versión instalada.
+
+Node.js y NPM/Yarn: Para la compilación de activos de frontend.
+
+🚀 Instalación y Configuración
+Siga estos pasos para poner en marcha el proyecto en su entorno local:
+
+Clonar el repositorio:
+
+git clone https://github.com/franciscorojas27/ORDENRI.git
+cd ORDENRI
+
+Instalar dependencias de Composer:
+
+composer install
+
+Configurar el archivo de entorno:
+
+Cree una copia del archivo .env.example y renómbrela a .env:
+
+cp .env.example .env
+
+Abra el archivo .env y configure los siguientes parámetros:
+
+APP_URL: La URL de su aplicación (ej: http://localhost:8000).
+
+DB_DATABASE, DB_USERNAME, DB_PASSWORD: Credenciales de su base de datos MySQL.
+
+Generar la clave de aplicación:
+
+php artisan key:generate
+
+Ejecutar migraciones y seeders (opcional, para datos de prueba):
+
+php artisan migrate --seed
+
+(Si desea poblar la base de datos con datos de prueba iniciales.)
+
+Instalar dependencias de Node.js y compilar activos de frontend:
+
+npm install
+npm run dev  # Para desarrollo
+# o
+npm run build # Para producción
+
+Iniciar el servidor de desarrollo de Laravel (si no está usando un servidor web como Nginx/Apache):
+
+php artisan serve
+
+🔒 Autenticación
+El sistema incluye un módulo de autenticación personalizado basado en Laravel Breeze. Los usuarios pueden:
+
+Registrarse
+
+Iniciar Sesión
+
+Restablecer Contraseña (se ha agregado un botón para volver en el formulario de "forgot-email")
+
+📝 Contribución
+¡Las contribuciones son bienvenidas! Si desea mejorar este proyecto, por favor siga los siguientes pasos:
+
+Haga un fork del repositorio.
+
+Cree una nueva rama (git checkout -b feature/su-caracteristica).
+
+Realice sus cambios y haga commit (git commit -am 'Agregar nueva característica').
+
+Suba sus cambios a su fork (git push origin feature/su-caracteristica).
+
+Abra un Pull Request explicando sus cambios.
+
+
+📧 Contacto
+Para cualquier consulta o sugerencia, puede contactar al desarrollador:
+
+Francisco Rojas - franciscorojas27
